@@ -1,0 +1,3 @@
+[submodule "assessmentFramework/fpga/ip/core-comblock"]
+	path = assessmentFramework/fpga/ip/core-comblock
+	url = https://gitlab.com/ictp-mlab/core-comblock.git
