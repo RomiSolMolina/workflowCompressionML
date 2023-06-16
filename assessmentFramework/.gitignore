@@ -3,3 +3,4 @@ project_*/*
 *.jou
 *.log
 *.str
+*.Xil*
