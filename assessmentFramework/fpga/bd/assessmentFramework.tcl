@@ -126,6 +126,7 @@ if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
 xilinx.com:hls:myproject:1.0\
 xilinx.com:ip:axi_uartlite:2.0\
+xilinx.com:ip:c_counter_binary:12.0\
 xilinx.com:ip:clk_wiz:6.0\
 www.ictp.it:user:comblock:2.0\
 xilinx.com:ip:util_vector_logic:2.0\
@@ -407,6 +408,23 @@ proc create_root_design { parentCell } {
    CONFIG.USE_BOARD_FLOW {true} \
  ] $axi_uartlite_0
 
+  # Create instance: c_counter_binary_0, and set properties
+  set c_counter_binary_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:c_counter_binary:12.0 c_counter_binary_0 ]
+  set_property -dict [ list \
+   CONFIG.CE {true} \
+   CONFIG.Fb_Latency {1} \
+   CONFIG.Fb_Latency_Configuration {Automatic} \
+   CONFIG.Final_Count_Value {1D} \
+   CONFIG.Implementation {Fabric} \
+   CONFIG.Latency {1} \
+   CONFIG.Latency_Configuration {Automatic} \
+   CONFIG.Output_Width {6} \
+   CONFIG.Restrict_Count {true} \
+   CONFIG.SCLR {true} \
+   CONFIG.Sync_CE_Priority {CE_Overrides_Sync} \
+   CONFIG.Sync_Threshold_Output {false} \
+ ] $c_counter_binary_0
+
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
   set_property -dict [ list \
@@ -439,6 +457,7 @@ proc create_root_design { parentCell } {
    CONFIG.REGS_IN_ENA {false} \
    CONFIG.REGS_OUT_DEPTH {1} \
    CONFIG.REGS_OUT_DWIDTH {6} \
+   CONFIG.REGS_OUT_ENA {false} \
  ] $comblock_0
 
   # Create instance: util_vector_logic_0, and set properties
@@ -459,11 +478,12 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net microblaze_0_axi_periph_M00_AXI [get_bd_intf_pins ProcessingSystem/M00_AXI] [get_bd_intf_pins comblock_0/AXIL]
 
   # Create port connections
-  connect_bd_net -net clk_wiz_0_sysClk [get_bd_pins ML_Inference/ap_clk] [get_bd_pins ProcessingSystem/Clk] [get_bd_pins axi_uartlite_0/s_axi_aclk] [get_bd_pins clk_wiz_0/sysClk] [get_bd_pins comblock_0/axil_aclk] [get_bd_pins comblock_0/fifo_clk_i]
+  connect_bd_net -net c_counter_binary_0_Q [get_bd_pins ML_Inference/inputSignal_TDEST] [get_bd_pins c_counter_binary_0/Q]
+  connect_bd_net -net clk_wiz_0_sysClk [get_bd_pins ML_Inference/ap_clk] [get_bd_pins ProcessingSystem/Clk] [get_bd_pins axi_uartlite_0/s_axi_aclk] [get_bd_pins c_counter_binary_0/CLK] [get_bd_pins clk_wiz_0/sysClk] [get_bd_pins comblock_0/axil_aclk] [get_bd_pins comblock_0/fifo_clk_i]
   connect_bd_net -net comblock_0_fifo_data_o [get_bd_pins ML_Inference/inputSignal_TDATA] [get_bd_pins comblock_0/fifo_data_o]
+  connect_bd_net -net comblock_0_fifo_empty_o [get_bd_pins c_counter_binary_0/SCLR] [get_bd_pins comblock_0/fifo_empty_o]
   connect_bd_net -net comblock_0_fifo_full_o [get_bd_pins comblock_0/fifo_full_o] [get_bd_pins util_vector_logic_0/Op1]
-  connect_bd_net -net comblock_0_fifo_valid_o [get_bd_pins ML_Inference/inputSignal_TVALID] [get_bd_pins comblock_0/fifo_valid_o]
-  connect_bd_net -net comblock_0_reg0_o [get_bd_pins ML_Inference/inputSignal_TDEST] [get_bd_pins comblock_0/reg0_o]
+  connect_bd_net -net comblock_0_fifo_valid_o [get_bd_pins ML_Inference/inputSignal_TVALID] [get_bd_pins c_counter_binary_0/CE] [get_bd_pins comblock_0/fifo_valid_o]
   connect_bd_net -net myproject_0_inputSignal_TREADY [get_bd_pins ML_Inference/inputSignal_TREADY] [get_bd_pins comblock_0/fifo_re_i]
   connect_bd_net -net myproject_0_outputPrediction_TDATA [get_bd_pins ML_Inference/outputPrediction_TDATA] [get_bd_pins comblock_0/fifo_data_i]
   connect_bd_net -net myproject_0_outputPrediction_TVALID [get_bd_pins ML_Inference/outputPrediction_TVALID] [get_bd_pins comblock_0/fifo_we_i]
