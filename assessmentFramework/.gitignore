@@ -1,1 +1,5 @@
 project_*
+project_*/*
+*.jou
+*.log
+*.str
