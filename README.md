@@ -9,5 +9,5 @@
 
 # Hardware assessment framework
 
-![image](https://github.com/RomiSolMolina/workflowCompressionML/assets/13749513/dfcfb8e7-6358-4c15-9032-d6bcc49dbe17)
+![image](https://github.com/RomiSolMolina/workflowCompressionML/assets/13749513/ffa96703-9715-4ee6-b89c-42bf15d23e68)
 
