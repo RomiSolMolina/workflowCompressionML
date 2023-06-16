@@ -303,10 +303,14 @@ proc create_hier_cell_ProcessingSystem { parentCell nameHier } {
   # Create instance: microblaze_0, and set properties
   set microblaze_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:11.0 microblaze_0 ]
   set_property -dict [ list \
-   CONFIG.C_DEBUG_ENABLED {1} \
+   CONFIG.C_ADDR_TAG_BITS {0} \
+   CONFIG.C_AREA_OPTIMIZED {1} \
+   CONFIG.C_DCACHE_ADDR_TAG {0} \
+   CONFIG.C_DEBUG_ENABLED {0} \
    CONFIG.C_D_AXI {1} \
    CONFIG.C_D_LMB {1} \
    CONFIG.C_I_LMB {1} \
+   CONFIG.C_USE_REORDER_INSTR {0} \
  ] $microblaze_0
 
   # Create instance: microblaze_0_axi_periph, and set properties
@@ -326,7 +330,6 @@ proc create_hier_cell_ProcessingSystem { parentCell nameHier } {
   connect_bd_intf_net -intf_net Conn2 [get_bd_intf_pins M02_AXI] [get_bd_intf_pins microblaze_0_axi_periph/M02_AXI]
   connect_bd_intf_net -intf_net microblaze_0_M_AXI_DP [get_bd_intf_pins microblaze_0/M_AXI_DP] [get_bd_intf_pins microblaze_0_axi_periph/S00_AXI]
   connect_bd_intf_net -intf_net microblaze_0_axi_periph_M00_AXI [get_bd_intf_pins M00_AXI] [get_bd_intf_pins microblaze_0_axi_periph/M00_AXI]
-  connect_bd_intf_net -intf_net microblaze_0_debug [get_bd_intf_pins mdm_1/MBDEBUG_0] [get_bd_intf_pins microblaze_0/DEBUG]
   connect_bd_intf_net -intf_net microblaze_0_dlmb_1 [get_bd_intf_pins microblaze_0/DLMB] [get_bd_intf_pins microblaze_0_local_memory/DLMB]
   connect_bd_intf_net -intf_net microblaze_0_ilmb_1 [get_bd_intf_pins microblaze_0/ILMB] [get_bd_intf_pins microblaze_0_local_memory/ILMB]
 
@@ -473,8 +476,8 @@ proc create_root_design { parentCell } {
   # Create address segments
   create_bd_addr_seg -range 0x00010000 -offset 0x40600000 [get_bd_addr_spaces ProcessingSystem/microblaze_0/Data] [get_bd_addr_segs axi_uartlite_0/S_AXI/Reg] SEG_axi_uartlite_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x44A00000 [get_bd_addr_spaces ProcessingSystem/microblaze_0/Data] [get_bd_addr_segs comblock_0/AXIL/AXIL] SEG_comblock_0_AXIL
-  create_bd_addr_seg -range 0x00002000 -offset 0x00000000 [get_bd_addr_spaces ProcessingSystem/microblaze_0/Data] [get_bd_addr_segs ProcessingSystem/microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem] SEG_dlmb_bram_if_cntlr_Mem
-  create_bd_addr_seg -range 0x00002000 -offset 0x00000000 [get_bd_addr_spaces ProcessingSystem/microblaze_0/Instruction] [get_bd_addr_segs ProcessingSystem/microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem] SEG_ilmb_bram_if_cntlr_Mem
+  create_bd_addr_seg -range 0x00010000 -offset 0x00000000 [get_bd_addr_spaces ProcessingSystem/microblaze_0/Data] [get_bd_addr_segs ProcessingSystem/microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem] SEG_dlmb_bram_if_cntlr_Mem
+  create_bd_addr_seg -range 0x00020000 -offset 0x00000000 [get_bd_addr_spaces ProcessingSystem/microblaze_0/Instruction] [get_bd_addr_segs ProcessingSystem/microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem] SEG_ilmb_bram_if_cntlr_Mem
   create_bd_addr_seg -range 0x00010000 -offset 0x44A10000 [get_bd_addr_spaces ProcessingSystem/microblaze_0/Data] [get_bd_addr_segs ML_Inference/s_axi_control/Reg] SEG_myproject_0_Reg
 
 
