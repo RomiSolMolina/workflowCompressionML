@@ -14,11 +14,14 @@ EPOCHS = 16
 BS = 32
 EARLY_STOPPING_PATIENCE = 5
 
+N_ITERATIONS_TEACHER = 2
+
 
 
 # Student optimization and training
 # -----------------------------------------------------------------
 
+N_ITERATIONS_STUDENT = 2
 
 EPOCHS_STUDENT = 32
 BS_STUDENT = 32
@@ -32,3 +35,6 @@ EPOCHS_2D = 32
 
 EPOCHS_STUDENT = 32
 BS_STUDENT = 32
+
+# Pruning
+CONSTANT_SPARSITY = 0.5

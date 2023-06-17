@@ -28,7 +28,7 @@ import config
 def build_model(hp):
     INPUT_SHAPE = config.INPUT_SHAPE_2D
     model = Sequential()
-    
+
 
 # Model definition 
 # First block
@@ -88,7 +88,7 @@ def build_model(hp):
     return model
 
 
-def teacherBO (images_train, y_train, images_test, y_test, it):
+def teacherBO (images_train, y_train, images_test, y_test):
     
     bestHP = []
 
@@ -105,7 +105,7 @@ def teacherBO (images_train, y_train, images_test, y_test, it):
     tuner = kt.BayesianOptimization(
         build_model,
         objective = "val_accuracy",
-        max_trials = 5,
+        max_trials = config.N_ITERATIONS_TEACHER,
         seed = 37,
         directory = OUTPUT_PATH
 )

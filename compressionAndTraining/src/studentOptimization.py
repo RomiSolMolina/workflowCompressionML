@@ -27,7 +27,10 @@ from tensorflow_model_optimization.python.core.sparsity.keras import prune, prun
 from tensorflow_model_optimization.sparsity.keras import strip_pruning
 from tensorflow_model_optimization.sparsity import keras as sparsity
 
+import shutil, sys
+
 from src.distillationClassKeras import *
+import config
 
 def build_model_QK_student(hp):
 
@@ -41,7 +44,7 @@ def build_model_QK_student(hp):
 
     # INPUT_SHAPE = (80, 80, 3)
     model = Sequential()
-    inputShape = (80, 80, 3)
+    inputShape = config.INPUT_SHAPE_2d
     chanDim = -1
 
 # First block
@@ -157,7 +160,7 @@ def build_model_QK_student(hp):
     opt = Adam(learning_rate=lr)
     
     NSTEPS = int(31188*0.9) // 128
-    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(0.5, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} #2000
+    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(config.CONSTANT_SPARSITY, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} #2000
     model = prune.prune_low_magnitude(model, **pruning_params)
     
     # compile the model
@@ -174,20 +177,17 @@ def studentBO(images_train, y_train, images_test, y_test, teacher_baseline, it):
             ]  
     callbacks.append(pruning_callbacks.UpdatePruningStep())
 
-
-    print("[INFO] instantiating a bayesian optimization tuner object...")
-
     OUTPUT_PATH = "tuner"
 
-    # if (os.path.exists(OUTPUT_PATH) == 'True'):
-    #     shutil.rmtree(OUTPUT_PATH, ignore_errors = True)
+    if (os.path.exists(OUTPUT_PATH) == 'True'):
+        shutil.rmtree(OUTPUT_PATH, ignore_errors = True)
 
     studentCNN_ = Distiller(student=build_model_QK_student, teacher=teacher_baseline)
         
     tuner = kt.BayesianOptimization(
         studentCNN_.student,
         objective = "val_accuracy",
-        max_trials = it,
+        max_trials = config.N_ITERATIONS_STUDENT,
         seed = 49,
         directory = OUTPUT_PATH
     )
@@ -196,9 +196,9 @@ def studentBO(images_train, y_train, images_test, y_test, teacher_baseline, it):
 
         x=images_train, y=y_train,
         validation_data=(images_test, y_test),
-        batch_size=32, #config.BS,
+        batch_size= config.EPOCHS_STUDENT,
         callbacks=[callbacks],
-        epochs= 32 #config.EPOCHS
+        epochs= config.EPOCHS_STUDENT
     )
 
 
