@@ -5,7 +5,7 @@
 
 ## DNN training and compression
 
-![image](https://github.com/RomiSolMolina/workflowCompressionML/assets/13749513/c0bcba70-6fc8-447e-8de7-6b2d6ad83288)
+![image](https://github.com/RomiSolMolina/workflowCompressionML/assets/13749513/216eeb58-0767-476d-8dfe-d8255e99a2e5)
 
 ## Hardware assessment framework
 
