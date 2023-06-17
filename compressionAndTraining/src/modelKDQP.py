@@ -40,8 +40,8 @@ def modelKDQP(bestHP):
     kernelQ = "quantized_bits(8,1,alpha=1)"
     biasQ = "quantized_bits(8,2,alpha=1)"
     biasQ_4b = "quantized_bits(4,2,alpha=1)"
-    activationQ = 'quantized_relu(8)'
-    activationQ_4b = 'quantized_relu(4, 0)'
+    activationQ = 'quantized_bits(8)'
+    activationQ_4b = 'quantized_bits(4, 0)'
 
     # Input
     x = x_in = Input(shape=(80,80,3))
