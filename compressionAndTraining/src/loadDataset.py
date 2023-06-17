@@ -12,43 +12,62 @@ import pandas as pd
 from tensorflow.keras.utils import to_categorical
 
 
-def load_data(data_dir):
+# def load_data(data_dir):
 
-    directories = [d for d in os.listdir(data_dir) 
-                   if os.path.isdir(os.path.join(data_dir, d))]
+#     directories = [d for d in os.listdir(data_dir) 
+#                    if os.path.isdir(os.path.join(data_dir, d))]
+#     labels = []
+#     images = []
+#     for d in directories:
+#         label_dir = os.path.join(data_dir, d)
+#         file_names = [os.path.join(label_dir, f) 
+#                       for f in os.listdir(label_dir) if f.endswith(".jpg")]
+#         for f in file_names:
+#             images.append(io.imread(f)/255.0)
+#             labels.append(int(d))
+#     return images, labels
+
+import os
+from PIL import Image
+import numpy as np
+
+def load_data(data_dir):
     labels = []
     images = []
-    for d in directories:
-        label_dir = os.path.join(data_dir, d)
-        file_names = [os.path.join(label_dir, f) 
-                      for f in os.listdir(label_dir) if f.endswith(".jpg")]
-        for f in file_names:
-            images.append(io.imread(f)/255.0)
-            labels.append(int(d))
+
+    for label in os.listdir(data_dir):
+        label_dir = os.path.join(data_dir, label)
+        if os.path.isdir(label_dir):
+            for file in os.listdir(label_dir):
+                if file.endswith(".jpg"):
+                    file_path = os.path.join(label_dir, file)
+                    image = Image.open(file_path)
+                    image = np.array(image) / 255.0
+                    images.append(image)
+                    labels.append(int(label))
+    
     return images, labels
 
 def loadDataset_2D(root_path, classLabels, rows, cols):
 
     datasetFolderName = root_path
-    MODEL_FILENAME=root_path+"model_cnn_2.h5"
+   
     sourceFiles=[]
-    
     X=[]
     Y=[]
 
-    train_path = datasetFolderName+'/train/'
-    validation_path = datasetFolderName+'/validation/'
-    test_path = datasetFolderName+'/test/'
+    train_path = datasetFolderName + '/train/'
+    validation_path = datasetFolderName + '/validation/'
+    test_path = datasetFolderName + '/test/'
 
     # Load training, validation, and testing datasets.
-
     images_train, labels_train = load_data(train_path)
     images_validation, labels_validation = load_data(validation_path)
     images_test, labels_test = load_data(test_path)
 
-    print("Unique Labels: {0}\nTotal Images: {1}".format(len(set(labels_train)), len(images_train)))
-    print("Unique Labels: {0}\nTotal Images: {1}".format(len(set(labels_validation)), len(images_validation)))
-    print("Unique Labels: {0}\nTotal Images: {1}".format(len(set(labels_test)), len(images_test)))
+    print("Label: {0}\n Total Images: {1}".format(len(set(labels_train)), len(images_train)))
+    print("Label: {0}\n Total Images: {1}".format(len(set(labels_validation)), len(images_validation)))
+    print("Label: {0}\n Total Images: {1}".format(len(set(labels_test)), len(images_test)))
 
     # Resize images
     images_train = ([skimage.transform.resize(image, (80, 80), mode='constant')
@@ -63,6 +82,9 @@ def loadDataset_2D(root_path, classLabels, rows, cols):
 
     labels_train = np.array(labels_train)
     images_train = np.array(images_train)
+
+    labels_validation = np.array(labels_validation)
+    images_validation = np.array(images_validation)
 
     labels_test = np.array(labels_test)
     images_test = np.array(images_test)
