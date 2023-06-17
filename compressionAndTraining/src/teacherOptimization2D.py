@@ -23,18 +23,19 @@ from tensorflow.keras.layers import Input
 
 import shutil, sys
 
+import config
 
 def build_model(hp):
-    INPUT_SHAPE = (80, 80, 3)
+    INPUT_SHAPE = config.INPUT_SHAPE_2D
     model = Sequential()
-    inputShape = INPUT_SHAPE
-    chanDim = -1
+    
 
+# Model definition 
 # First block
     model.add(Conv2D(
         hp.Int("conv_1", min_value=32, max_value=128, step=32),
         (3, 3), padding="same",
-        kernel_regularizer=l2(0.0001), input_shape=(80, 80, 3)))
+        kernel_regularizer=l2(0.0001), input_shape=INPUT_SHAPE))
     model.add(BatchNormalization())
     model.add(Activation("relu"))
         
@@ -55,7 +56,6 @@ def build_model(hp):
         (3, 3), padding="same", kernel_regularizer=l2(0.0001)))          
     model.add(Activation("relu"))
     model.add(MaxPooling2D(pool_size=(2, 2)))                 
-
    
     model.add(Flatten())
     
@@ -76,12 +76,12 @@ def build_model(hp):
     # Output Layer with Softmax activation
     model.add(Dense(3, activation='softmax')) 
      
-    # initialize the learning rate choices and optimizer
+    # Initialize the learning rate choices and optimizer
     lr = hp.Choice("learning_rate",
                    values=[1e-1, 1e-3, 1e-4])
     opt = Adam(learning_rate=lr)
     
-    # compile the model
+    # Compile the model
     model.compile(optimizer=opt, loss="categorical_crossentropy",
         metrics=["accuracy"])
 
@@ -91,9 +91,6 @@ def build_model(hp):
 def teacherBO (images_train, y_train, images_test, y_test, it):
     
     bestHP = []
-
-
-    print("[INFO] instantiating a bayesian optimization tuner object...")
 
     OUTPUT_PATH = "tuner_teacher"
 
@@ -117,9 +114,9 @@ def teacherBO (images_train, y_train, images_test, y_test, it):
 
         x=images_train, y=y_train,
         validation_data=(images_test, y_test),
-        batch_size=32, #config.BS,
+        batch_size = config.BS_2D,
         callbacks=[callbacks],
-        epochs= 32 #config.EPOCHS
+        epochs= config.EPOCHS_2D
     )
 
 

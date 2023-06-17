@@ -33,6 +33,7 @@ def build_model(hp):
     inputShape = config.INPUT_SHAPE
     chanDim = -1
     
+    # Model definition 
     model.add(Dense(
         hp.Int("fc1", min_value=32, max_value=300, step=10),
         kernel_regularizer=l2(0.0001), input_shape=inputShape))
@@ -54,12 +55,12 @@ def build_model(hp):
     model.add(Dense(4, name='output'))
     model.add(Activation("softmax"))
     
-    # initialize the learning rate choices and optimizer
+    # Initialize the learning rate choices and optimizer
     lr = hp.Choice("learning_rate",
                    values=[1e-1, 1e-3, 1e-4])
     opt = Adam(learning_rate=lr)
     
-    # compile the model
+    # Compile the model
     model.compile(optimizer=opt, loss="categorical_crossentropy",
         metrics=["accuracy"])
 
@@ -68,8 +69,6 @@ def build_model(hp):
 
 def teacherBO(xTrain, yTrain, xTest, yTest, it):
 
-
-    print("[INFO] instantiating a bayesian optimization tuner object...")
 
     OUTPUT_PATH = "tuner_teacher"
 
@@ -83,7 +82,6 @@ def teacherBO(xTrain, yTrain, xTest, yTest, it):
         restore_best_weights=True)
 
 
-
     tuner = kt.BayesianOptimization(
         build_model,
         objective = "val_accuracy",
@@ -91,8 +89,6 @@ def teacherBO(xTrain, yTrain, xTest, yTest, it):
         seed = 37,
         directory = OUTPUT_PATH
     )
-
-    print("[INFO] performing hyperparameter search...")
 
     tuner.search(
         x=xTrain, y=yTrain,
