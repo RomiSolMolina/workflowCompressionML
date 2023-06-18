@@ -1,6 +1,10 @@
 
 import os
 
+import numpy as np
+from numpy import array
+import shutil, sys
+
 import tensorflow as tf 
 
 from tensorflow.keras.models import *
@@ -14,14 +18,12 @@ from tensorflow.keras.losses import categorical_crossentropy as logloss
 from tensorflow.keras.metrics import categorical_accuracy
 from tensorflow.keras.regularizers import l2, l1
 from tensorflow.keras.optimizers import SGD, Adam
-
-import keras_tuner as kt
-
 from tensorflow.keras.layers import Lambda
 from tensorflow.keras.models import load_model
 from tensorflow.keras.layers import Input
 
-import shutil, sys
+import keras_tuner as kt
+
 
 import config
 

@@ -9,6 +9,11 @@ from skimage import io
 from sklearn.utils import shuffle
 import pandas as pd
 
+import tensorflow as tf 
+
+from tensorflow.keras.models import *
+from tensorflow.keras.layers import *
+
 from tensorflow.keras.utils import to_categorical
 
 
@@ -97,7 +102,7 @@ def loadDataset_2D(root_path, classLabels, rows, cols):
 
 
 
-def preproc_dataset(signal_df):
+def preproc_dataset_1D(signal_df):
     
     # Remove cols that does not belong to the signal shape
     UNUSED_COLUMNS = ['Energy', 'FCI']

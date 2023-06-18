@@ -1,4 +1,7 @@
 import os
+import numpy as np
+import shutil, sys
+
 
 import tensorflow as tf 
 
@@ -13,21 +16,19 @@ from tensorflow.keras.losses import categorical_crossentropy as logloss
 from tensorflow.keras.metrics import categorical_accuracy
 from tensorflow.keras.regularizers import l2, l1
 from tensorflow.keras.optimizers import SGD, Adam
+from tensorflow.keras.layers import Lambda
+from tensorflow.keras.models import load_model
+from tensorflow.keras.layers import Input
+from tensorflow_model_optimization.python.core.sparsity.keras import prune, pruning_callbacks, pruning_schedule
+from tensorflow_model_optimization.sparsity.keras import strip_pruning
+from tensorflow_model_optimization.sparsity import keras as sparsity
 
 import keras_tuner as kt
 from qkeras import *
 
 from qkeras import QActivation
 from qkeras import QDense, QConv2DBatchnorm
-from tensorflow.keras.layers import Lambda
-from tensorflow.keras.models import load_model
-from tensorflow.keras.layers import Input
 
-from tensorflow_model_optimization.python.core.sparsity.keras import prune, pruning_callbacks, pruning_schedule
-from tensorflow_model_optimization.sparsity.keras import strip_pruning
-from tensorflow_model_optimization.sparsity import keras as sparsity
-
-import shutil, sys
 
 from src.distillationClassKeras import *
 import config
