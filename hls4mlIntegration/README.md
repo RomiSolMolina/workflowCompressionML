@@ -1,4 +1,8 @@
-# Integration with a hardwre synthesis tool for ML: hls4ml integration
+# Integration with a hardware synthesis tool for ML
+
+The integration is performed through hls4ml https://fastmachinelearning.org/hls4ml/
+
+
 
 
 
