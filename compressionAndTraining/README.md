@@ -3,7 +3,7 @@
 The example for DNN training and compression is based on 1D signal classification. 
 
 ### Files:
-- compression.ipynb: Main Jupyter Notebook for model training and compression, along with hls4ml integration.
+- compression.ipynb: Main Jupyter Notebook file to perform model training and compression.
 
 ### Folder: 
 - src folder: contains source codes that correspond to auxiliary functions.
