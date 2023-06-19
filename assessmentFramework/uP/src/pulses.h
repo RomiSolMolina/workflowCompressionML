@@ -8,7 +8,7 @@
 #ifndef SRC_PULSES_H_
 #define SRC_PULSES_H_
 
-#define PULSES_PER_TYPE		10 //Number of individual pulses per type (muon/electron/saturated)
+#define PULSES_PER_TYPE		5 //Number of individual pulses per type (muon/electron/saturated)
 #define SAMPLES_PER_PULSE	30 //Number of samples for each recorded trace
 
 
@@ -56,6 +56,8 @@ const unsigned int PULSE_3[] = {
 
 const unsigned int *PULSES[] = {PULSE_TYPE_0, PULSE_TYPE_1, PULSE_TYPE_2, PULSE_TYPE_3};
 
+// Expected ML Inference IP core output classes for each input pulse type
+const unsigned int EXPECTED_OUTPUTS[] = {0, 1, 2, 3};
 
 
 
