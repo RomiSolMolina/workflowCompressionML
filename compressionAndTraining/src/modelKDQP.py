@@ -39,17 +39,18 @@ def modelKDQP(bestHP):
     Output: compressed model. 
 
     '''
-    ######## ---------------------------  Model definition -----------------------------------------
+    ######## ---------------------------  Model definition - 2D STUDENT -----------------------------------------
 
     # Number of bits 
-
+    ## 4-bits
     kernelQ_4b = "quantized_bits(4,2,alpha=1)"
+    biasQ_4b = "quantized_bits(4,2,alpha=1)"
+    activationQ_4b = 'quantized_bits(4, 0)'
+    ## 8-bits
     kernelQ = "quantized_bits(8,1,alpha=1)"
     biasQ = "quantized_bits(8,2,alpha=1)"
-    biasQ_4b = "quantized_bits(4,2,alpha=1)"
     activationQ = 'quantized_bits(8)'
-    activationQ_4b = 'quantized_bits(4, 0)'
-
+  
     # Input
     x = x_in = Input(shape=(80,80,3))
 
@@ -105,7 +106,6 @@ def modelKDQP(bestHP):
     x = MaxPooling2D(pool_size = (2,2),name='pool_2')(x)
 
     # Block 4
-
     x = QConv2DBatchnorm(int(bestHP[6]), kernel_size=(3,3), 
                             padding='same',
                             kernel_quantizer = kernelQ,
