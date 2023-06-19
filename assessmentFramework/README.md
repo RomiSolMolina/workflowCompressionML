@@ -9,3 +9,4 @@ This version targets a Basys 3 development board (XC7A35T-1CPG236C FPGA part) wi
 - Firmware:
   - Automatic verification of ML inference IP core outputs
 
+Compiler optimization level 3 (-O3) is mandatory to successfully compile the firmware in the provided hardware platform.
