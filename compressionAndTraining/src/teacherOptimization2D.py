@@ -25,10 +25,10 @@ from tensorflow.keras.layers import Input
 import keras_tuner as kt
 
 
-import config
+import src.config
 
 def build_model(hp):
-    INPUT_SHAPE = config.INPUT_SHAPE_2D
+    INPUT_SHAPE = (80, 80, 3)
     model = Sequential()
 
 
@@ -107,7 +107,7 @@ def teacherBO (images_train, y_train, images_test, y_test):
     tuner = kt.BayesianOptimization(
         build_model,
         objective = "val_accuracy",
-        max_trials = config.N_ITERATIONS_TEACHER,
+        max_trials = 10,
         seed = 37,
         directory = OUTPUT_PATH
 )
@@ -116,22 +116,19 @@ def teacherBO (images_train, y_train, images_test, y_test):
 
         x=images_train, y=y_train,
         validation_data=(images_test, y_test),
-        batch_size = config.BS_2D,
+        batch_size = 32,
         callbacks=[callbacks],
-        epochs= config.EPOCHS_2D
+        epochs= 32
     )
 
 
     tuner.get_best_hyperparameters(num_trials=1)[0] 
-
-    summary = tuner.results_summary(num_trials=it)
     
     #print(summary)
     
     bestHP = tuner.get_best_hyperparameters()[0]
     
-    model = tuner.hypermodel.build(bestHP)
-    
+       
 
 
     return bestHP

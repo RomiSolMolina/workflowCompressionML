@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------
 
 # define the path to our output directory
-OUTPUT_PATH = "outputhls4ml_particle"
+OUTPUT_PATH = "path"
 # initialize the input shape and number of classes
 INPUT_SHAPE = (30,)
 NUM_CLASSES = 4
@@ -27,7 +27,7 @@ EPOCHS_STUDENT = 32
 BS_STUDENT = 32
 
 
-INPUT_SHAPE_2d = (80, 80, 3)
+INPUT_SHAPE_2D = (80, 80, 3)
 NUM_CLASSES = 3
 
 BS_2D = 32

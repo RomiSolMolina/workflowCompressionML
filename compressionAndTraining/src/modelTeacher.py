@@ -20,11 +20,36 @@ from qkeras import QDense, QConv2DBatchnorm
 from tensorflow.keras.layers import Lambda
 from tensorflow.keras.models import load_model
 from tensorflow.keras.layers import Input
+from tensorflow.keras import layers
 
 
-def modelTeacherDefinition(bestHP):
+def modelTeacherDefinition_1D(bestHP):
+
+    teacher = keras.Sequential(
+        [
+            keras.Input(shape=(30,)),
+            
+            layers.Dense(bestHP[0], name='fc1', kernel_regularizer=l2(0.0001)),
+            layers.Activation(activation='relu', name='relu1'),
+ 
+            # layers.Dense(200, name='fc3', kernel_regularizer=l2(0.0001)),
+            # layers.Activation(activation='relu', name='relu3'),
+
+            layers.Dense(bestHP[1], name='fc2', kernel_regularizer=l2(0.0001)),
+            layers.Activation(activation='relu', name='relu2'),
+            layers.Dense(bestHP[2], name='fc3', kernel_regularizer=l2(0.0001)),
+            layers.Activation(activation='relu', name='relu3'),
+            layers.Dense(bestHP[3], name='fc4', kernel_regularizer=l2(0.0001)),
+            layers.Activation(activation='relu', name='relu4'),
+            
+            layers.Dense(4, name='output', kernel_regularizer=l2(0.0001)),
+            layers.Activation(activation='softmax', name='softmax'),
+            
+        ],
+        name="teacher",
+    )
+
+    teacher.summary()
 
 
-
-
-    return model
+    return teacher

@@ -31,7 +31,7 @@ from qkeras import QDense, QConv2DBatchnorm
 
 
 from src.distillationClassKeras import *
-import config
+import src.config
 
 def build_model_QK_student(hp):
 
@@ -42,10 +42,11 @@ def build_model_QK_student(hp):
     activationQ = 'quantized_relu(8,2)'
     activationQ_4b = 'quantized_relu(4, 0)'
 
-
+    CONSTANT_SPARSITY = 0.5
+    
     # INPUT_SHAPE = (80, 80, 3)
     model = Sequential()
-    inputShape = config.INPUT_SHAPE_2d
+    inputShape = (80, 80, 3)
     chanDim = -1
 
 # First block
@@ -161,7 +162,7 @@ def build_model_QK_student(hp):
     opt = Adam(learning_rate=lr)
     
     NSTEPS = int(31188*0.9) // 128
-    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(config.CONSTANT_SPARSITY, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} #2000
+    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(CONSTANT_SPARSITY, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} #2000
     model = prune.prune_low_magnitude(model, **pruning_params)
     
     # compile the model
@@ -171,7 +172,7 @@ def build_model_QK_student(hp):
     return model
 
 
-def studentBO(images_train, y_train, images_test, y_test, teacher_baseline, it):
+def studentBO_2D(images_train, y_train, images_test, y_test, teacher_baseline, N_ITERATIONS_STUDENT):
     callbacks = [
             tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=10, verbose=1, restore_best_weights=True),
             tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=3, verbose=1),
@@ -188,7 +189,7 @@ def studentBO(images_train, y_train, images_test, y_test, teacher_baseline, it):
     tuner = kt.BayesianOptimization(
         studentCNN_.student,
         objective = "val_accuracy",
-        max_trials = config.N_ITERATIONS_STUDENT,
+        max_trials = N_ITERATIONS_STUDENT,
         seed = 49,
         directory = OUTPUT_PATH
     )
@@ -197,20 +198,16 @@ def studentBO(images_train, y_train, images_test, y_test, teacher_baseline, it):
 
         x=images_train, y=y_train,
         validation_data=(images_test, y_test),
-        batch_size= config.EPOCHS_STUDENT,
+        batch_size= 32,
         callbacks=[callbacks],
-        epochs= config.EPOCHS_STUDENT
+        epochs= 32
     )
 
 
     tuner.get_best_hyperparameters(num_trials=1)[0] 
-
-    summary = tuner.results_summary(num_trials=it)
-    
     #print(summary)
     
     bestHP = tuner.get_best_hyperparameters()[0]
-    
-    model = tuner.hypermodel.build(bestHP)
+
 
     return bestHP

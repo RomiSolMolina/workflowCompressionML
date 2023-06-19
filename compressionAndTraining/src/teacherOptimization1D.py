@@ -1,5 +1,5 @@
-import os
 
+import os
 import csv
 import numpy as np
 from numpy import array
@@ -28,16 +28,19 @@ from tensorflow.keras.layers import Input
 
 import shutil, sys
 
-import config
+from src.config import *
 
-# Defiition of the teacher model. 
+# Keras tuner
+# https://www.tensorflow.org/tutorials/keras/keras_tuner
+# 
+
+# Defintion of the teacher model. 
 # Architecture: Multi-layer perceptron
 
-def build_model(hp):
+def build_model_teacher(hp):
 
     model = Sequential()
-    inputShape = config.INPUT_SHAPE
-    chanDim = -1
+    inputShape = (30, ) #config.INPUT_SHAPE
     
     # Model definition 
     model.add(Dense(
@@ -73,25 +76,22 @@ def build_model(hp):
     return model
 
 
-def teacherBO(xTrain, yTrain, xTest, yTest, it):
-
+def teacherBO_1D(xTrain, xTest, yTrain, yTest):
 
     OUTPUT_PATH = "tuner_teacher"
-
+    # Clean OUTPUT_PATH
     if (os.path.exists(OUTPUT_PATH) == 'True'):
         shutil.rmtree(OUTPUT_PATH, ignore_errors = True)
-
-        
+       
     es = EarlyStopping(
         monitor="val_loss",
-        patience= config.EARLY_STOPPING_PATIENCE,
+        patience= 5, #config.EARLY_STOPPING_PATIENCE,
         restore_best_weights=True)
 
-
     tuner = kt.BayesianOptimization(
-        build_model,
+        build_model_teacher,
         objective = "val_accuracy",
-        max_trials = 5,
+        max_trials = 2, #config.N_ITERATIONS_TEACHER,
         seed = 37,
         directory = OUTPUT_PATH
     )
@@ -99,17 +99,14 @@ def teacherBO(xTrain, yTrain, xTest, yTest, it):
     tuner.search(
         x=xTrain, y=yTrain,
         validation_data=(xTest, yTest),
-        batch_size = config.BS,
+        batch_size = 32, #config.BS,
         callbacks=[es],
-        epochs = config.EPOCHS
+        epochs = 32 #config.EPOCHS
     )
 
-    tuner.get_best_hyperparameters(num_trials=1)[0] 
-
-    summary = tuner.results_summary(num_trials=it)
-      
+    #tuner.get_best_hyperparameters(num_trials=1)[0] 
+     
     bestHP = tuner.get_best_hyperparameters()[0]
     
-    model = tuner.hypermodel.build(bestHP)
 
     return bestHP
