@@ -12,4 +12,5 @@ The example for DNN training and compression is based on 1D signal classificatio
 
 ## Getting started! 
 1. Open the file compression.ipynb.
-2. 
+2. You will see the imported libraries, the GPU initialization, and the definition of variables such as ...
+3. 
