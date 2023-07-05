@@ -25,10 +25,12 @@ from tensorflow.keras.layers import Input
 import keras_tuner as kt
 
 
+
+
 import src.config
 
 def build_model(hp):
-    INPUT_SHAPE = (80, 80, 3)
+    INPUT_SHAPE = (32, 32, 3)
     
     model = Sequential()
 
@@ -77,7 +79,7 @@ def build_model(hp):
     model.add(Activation("relu"))
     
     # Output Layer with Softmax activation
-    model.add(Dense(3, activation='softmax')) 
+    model.add(Dense(10, activation='softmax')) 
      
     # Initialize the learning rate choices and optimizer
     lr = hp.Choice("learning_rate",
@@ -91,7 +93,7 @@ def build_model(hp):
     return model
 
 
-def teacherBO (images_train, y_train, images_test, y_test):
+def teacherBO_SOTA (images_train, y_train, images_test, y_test):
     
     bestHP = []
 
