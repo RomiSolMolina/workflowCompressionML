@@ -38,14 +38,14 @@ def build_model(hp):
 # Model definition 
 # First block
     model.add(Conv2D(
-        hp.Int("conv_1", min_value=32, max_value=128, step=32),
+        hp.Int("conv_1", min_value=32, max_value=300, step=32),
         (3, 3), padding="same",
         kernel_regularizer=l2(0.0001), input_shape=INPUT_SHAPE))
     model.add(BatchNormalization())
     model.add(Activation("relu"))
         
     model.add(Conv2D(
-        hp.Int("conv_2", min_value=32, max_value=128, step=32),
+        hp.Int("conv_2", min_value=32, max_value=150, step=32),
         (3, 3), padding="same",
         kernel_regularizer=l2(0.0001), input_shape=(80, 80, 3)))
     model.add(BatchNormalization())
@@ -61,7 +61,17 @@ def build_model(hp):
         (3, 3), padding="same", kernel_regularizer=l2(0.0001)))          
     model.add(Activation("relu"))
     model.add(MaxPooling2D(pool_size=(2, 2)))                 
-   
+ 
+ # Third block
+    model.add(Conv2D(
+        hp.Int("conv_5", min_value=32, max_value=128, step=32),
+        (3, 3), padding="same", kernel_regularizer=l2(0.0001)))
+    model.add(Conv2D(
+        hp.Int("conv_6", min_value=32, max_value=128, step=32),
+        (3, 3), padding="same", kernel_regularizer=l2(0.0001)))          
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2)))   
+
     model.add(Flatten())
     
     model.add(Dense(
