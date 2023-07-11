@@ -23,6 +23,6 @@ Efficient end-to-end workflow for deploying DNNs on an SoC/FPGA by integrating h
 - Keras-Tuner 1.1.2
 - Scikit-learn 1.1.1
 
-## SoC/FPGA
+## SoC/FPGA tools
 - Vivado 2019.1 or Vivado 2019.2
 
