@@ -33,6 +33,8 @@ from src.distillationClassKeras import *
 
 from src.modelKDQP import *
 from src.modelKDQP_1D import *
+from src.modelKDQP_2D_SOTA import *
+
 
 
 def studentCompression(bestHP, images_train, y_train, teacher_baseline, lr):
@@ -91,6 +93,62 @@ def studentCompression(bestHP, images_train, y_train, teacher_baseline, lr):
 def studentCompression_1D(bestHP, xTrain, xTest, yTrain, yTest, teacher_baseline, lr):
 
     qmodel = modelKDQP_1D(bestHP)
+
+    ######## ---------------------------  P -----------------------------------------
+
+    NSTEPS = int(31188*0.9) // 128
+    from tensorflow_model_optimization.python.core.sparsity.keras import prune, pruning_callbacks, pruning_schedule
+    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(0.5, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} #2000
+    studentQ_CNN = prune.prune_low_magnitude(qmodel, **pruning_params)
+    train_labels = np.argmax(yTrain, axis=1)
+
+    # ######## ---------------------------  KD + QAT -----------------------------------------
+
+
+    distilledCNN = Distiller(student=studentQ_CNN, teacher=teacher_baseline)
+    train_labels = np.argmax(yTrain, axis=1)
+    
+    train = True
+    if train:
+        adam = Adam(lr)
+        distilledCNN.compile(
+        optimizer=adam,
+        metrics=[keras.metrics.SparseCategoricalAccuracy()],
+        student_loss_fn=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        distillation_loss_fn=keras.losses.KLDivergence(),
+        alpha=0.1, 
+        temperature=10,
+    )
+    callbacks = [
+                tf.keras.callbacks.EarlyStopping(patience=10, verbose=1),
+                tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=3, verbose=1),
+                ]  
+    callbacks.append(pruning_callbacks.UpdatePruningStep())
+
+    # Distill teacher to student 
+
+
+    history = distilledCNN.fit(xTrain, train_labels, 
+                               batch_size = 32, epochs= 32, callbacks = callbacks)
+
+    # distilledCNN.student.save("models/distilled_student.h5")
+
+    from qkeras.utils import _add_supported_quantized_objects
+    co = {}
+    _add_supported_quantized_objects(co)
+    model = strip_pruning(distilledCNN.student)
+    model.summary()
+
+    model.save("models/distilled_student_1D.h5")
+
+    return model
+
+
+
+def studentCompression_2D_SOTA(bestHP, xTrain, xTest, yTrain, yTest, teacher_baseline, lr):
+
+
+    qmodel = modelKDQP_SOTA(bestHP)
 
     ######## ---------------------------  P -----------------------------------------
 
