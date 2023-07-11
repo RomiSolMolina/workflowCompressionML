@@ -40,33 +40,27 @@ def modelTeacherDefinition_2D_SOTA(bestHP):
             layers.Conv2D(bestHP[2], (3, 3), padding="same", name='conv_3', kernel_regularizer=l2(0.0001)),
             layers.BatchNormalization(),        
             layers.Activation(activation='relu', name='relu3'),
-            layers.Conv2D( (3, 3), padding="same", name='conv_4', kernel_regularizer=l2(0.0001)),
+            layers.Conv2D(bestHP[3],  (3, 3), padding="same", name='conv_4', kernel_regularizer=l2(0.0001)),
             layers.BatchNormalization(),          
-            layers.Activation(activation='relu', name='relu3a'),
+            layers.Activation(activation='relu', name='relu4'),
             layers.MaxPooling2D(pool_size=(2, 2)),       
             
-            layers.Conv2D(bestHP[3], (3, 3), padding="same", name='conv_5', kernel_regularizer=l2(0.0001)),
-            layers.Conv2D(bestHP[4], (3, 3), padding="same", name='conv_6', kernel_regularizer=l2(0.0001)),
+            layers.Conv2D(bestHP[4], (3, 3), padding="same", name='conv_5', kernel_regularizer=l2(0.0001)),
             layers.Conv2D(bestHP[5], (3, 3), padding="same", name='conv_6', kernel_regularizer=l2(0.0001)),
 
-            layers.Activation(activation='relu', name='relu3'),
+            layers.Activation(activation='relu', name='relu5'),
             layers.MaxPooling2D(pool_size=(2, 2)), 
             
             layers.Flatten(),
             
             layers.Dense(bestHP[6], name='fc1', kernel_regularizer=l2(0.0001)),
-            layers.Activation(activation='relu', name='relu4'),
+            layers.Activation(activation='relu', name='relu6'),
             
             layers.Dense(bestHP[7], name='fc2', kernel_regularizer=l2(0.0001)),
-            layers.Activation(activation='relu', name='relu5'),
+            layers.Activation(activation='relu', name='relu7'),
             layers.Dense(bestHP[8], name='fc3', kernel_regularizer=l2(0.0001)),
-            layers.Activation(activation='relu', name='relu6'),
+            layers.Activation(activation='relu', name='relu8'),
 
-    #     layers.Dense( bestHP.get("fc4"), name='fc4', kernel_regularizer=l2(0.0001)),
-    #     layers.Activation(activation='relu', name='relu4'),
-            
-    #     layers.Dense( bestHP.get("fc5"), name='fc5', kernel_regularizer=l2(0.0001)),
-    #     layers.Activation(activation='relu', name='relu5'),
             
             layers.Dense(10, name='output', kernel_regularizer=l2(0.0001)),
             layers.Activation(activation='softmax', name='softmax'),

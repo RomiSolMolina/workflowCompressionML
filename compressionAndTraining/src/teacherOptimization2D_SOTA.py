@@ -117,7 +117,7 @@ def build_model(hp):
     return model
 
 
-def teacherBO_SOTA (images_train, y_train, images_test, y_test):
+def teacherBO_SOTA (images_train, y_train, images_test, y_test, N_ITERATIONS_TEACHER):
     
     bestHP = []
 
@@ -134,7 +134,7 @@ def teacherBO_SOTA (images_train, y_train, images_test, y_test):
     tuner = kt.BayesianOptimization(
         build_model,
         objective = "val_accuracy",
-        max_trials = 10,
+        max_trials = N_ITERATIONS_TEACHER,
         seed = 37,
         directory = OUTPUT_PATH
 )
@@ -151,7 +151,7 @@ def teacherBO_SOTA (images_train, y_train, images_test, y_test):
 
     tuner.get_best_hyperparameters(num_trials=1)[0] 
     
-    #print(summary)
+    print(tuner.get_best_hyperparameters(num_trials=1)[0] )
     
     bestHP = tuner.get_best_hyperparameters()[0]
     
