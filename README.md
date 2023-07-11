@@ -14,22 +14,14 @@ Efficient end-to-end workflow for deploying DNNs on an SoC/FPGA by integrating h
 
 
 ## Required libraries
-Python 3.9.13
-
-Tensorflow 2.4.1
-
-Qkeras 0.9.0
-
-hls4ml 0.6.0
-
-Pandas 1.5.2
-
-Seaborn 0.11.2
-
-Keras-Tuner 1.1.2
-
-Scikit-learn 1.1.1
+- Python 3.9.13
+- Tensorflow 2.4.1
+- Qkeras 0.9.0
+- hls4ml 0.6.0
+- Pandas 1.5.2
+- Seaborn 0.11.2
+- Keras-Tuner 1.1.2
+- Scikit-learn 1.1.1
 
 ## SoC/FPGA
-
-Vivado 2019.1 or Vivado 2019.2
+- Vivado 2019.1 or Vivado 2019.2
