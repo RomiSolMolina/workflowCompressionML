@@ -12,3 +12,13 @@ Efficient end-to-end workflow for deploying DNNs on an SoC/FPGA by integrating h
 
 ![image](https://github.com/RomiSolMolina/workflowCompressionML/assets/13749513/70b1a633-cb2a-402a-b707-dd2bdea9dd9d)
 
+
+## Required libraries
+Python 3.9.13
+Tensorflow 2.4.1
+Qkeras 0.9.0
+hls4ml 0.6.0
+Pandas 1.5.2
+Seaborn 0.11.2
+Keras-Tuner 1.1.2
+Scikit-learn 1.1.1
