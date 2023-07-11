@@ -142,7 +142,7 @@ def modelKDQP_SOTA(bestHP):
     
     
     # Output Layer with Softmax activation
-    x = QDense(3, name='output',
+    x = QDense(10, name='output',
                 kernel_quantizer=kernelQ, bias_quantizer=activationQ,
                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))(x)
     
