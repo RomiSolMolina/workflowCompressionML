@@ -33,7 +33,7 @@ from qkeras import QDense, QConv2DBatchnorm
 from src.distillationClassKeras import *
 import src.config
 
-def build_model_QK_student(hp):
+def build_model_QK_student_SOTA(hp):
 
     kernelQ_4b = "quantized_bits(4,2,alpha=1)"
     kernelQ = "quantized_bits(8,2,alpha=1)"
@@ -44,9 +44,9 @@ def build_model_QK_student(hp):
 
     CONSTANT_SPARSITY = 0.5
     
-    # INPUT_SHAPE = (80, 80, 3)
+    # INPUT_SHAPE = (32, 32, 3)
     model = Sequential()
-    inputShape = (80, 80, 3)
+    # inputShape = (32, 32, 3)
     chanDim = -1
 
 # First block
@@ -56,7 +56,7 @@ def build_model_QK_student(hp):
                                kernel_quantizer = kernelQ, 
                                bias_quantizer = biasQ,
                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
-                               input_shape=(80, 80, 3)
+                               input_shape=(32, 32, 3)
                                ))
     model.add(QActivation(activationQ ,name='relu1'))
 
@@ -151,7 +151,7 @@ def build_model_QK_student(hp):
     
     
     # Output Layer with Softmax activation
-    model.add(QDense(3, name='output',
+    model.add(QDense(10, name='output',
                 kernel_quantizer=quantized_bits(8,1,alpha=1), bias_quantizer=quantized_bits(8,1,alpha=1),
                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))),
     model.add(Activation(activation='softmax', name='softmax'))
@@ -172,7 +172,7 @@ def build_model_QK_student(hp):
     return model
 
 
-def studentBO_2D(images_train, y_train, images_test, y_test, teacher_baseline, N_ITERATIONS_STUDENT):
+def studentBO_2D_SOTA(images_train, y_train, images_test, y_test, teacher_baseline, N_ITERATIONS_STUDENT):
     callbacks = [
             tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=10, verbose=1, restore_best_weights=True),
             tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=3, verbose=1),
@@ -184,7 +184,7 @@ def studentBO_2D(images_train, y_train, images_test, y_test, teacher_baseline, N
     if (os.path.exists(OUTPUT_PATH) == 'True'):
         shutil.rmtree(OUTPUT_PATH, ignore_errors = True)
 
-    studentCNN_ = Distiller(student=build_model_QK_student, teacher=teacher_baseline)
+    studentCNN_ = Distiller(student=build_model_QK_student_SOTA, teacher=teacher_baseline)
         
     tuner = kt.BayesianOptimization(
         studentCNN_.student,

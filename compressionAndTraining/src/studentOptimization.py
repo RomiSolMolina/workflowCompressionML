@@ -44,7 +44,7 @@ def build_model_QK_student(hp):
 
     CONSTANT_SPARSITY = 0.5
     
-    # INPUT_SHAPE = (80, 80, 3)
+   # INPUT_SHAPE = (80, 80, 3)
     model = Sequential()
     #inputShape = (32, 32, 3)
     chanDim = -1
@@ -56,7 +56,7 @@ def build_model_QK_student(hp):
                                kernel_quantizer = kernelQ, 
                                bias_quantizer = biasQ,
                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
-                               input_shape=(32, 32, 3)
+                               input_shape= (80, 80, 3)
                                ))
     model.add(QActivation(activationQ ,name='relu1'))
 
@@ -172,7 +172,7 @@ def build_model_QK_student(hp):
     return model
 
 
-def studentBO_2D_SOTA(images_train, y_train, images_test, y_test, teacher_baseline, N_ITERATIONS_STUDENT):
+def studentBO_2D(images_train, y_train, images_test, y_test, teacher_baseline, N_ITERATIONS_STUDENT):
     callbacks = [
             tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=10, verbose=1, restore_best_weights=True),
             tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=3, verbose=1),

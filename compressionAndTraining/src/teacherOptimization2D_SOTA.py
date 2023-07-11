@@ -47,7 +47,7 @@ def build_model(hp):
     model.add(Conv2D(
         hp.Int("conv_2", min_value=32, max_value=64, step=32),
         (3, 3), padding="same",
-        kernel_regularizer=l2(0.0001), input_shape=(80, 80, 3)))
+        kernel_regularizer=l2(0.0001)))
     model.add(BatchNormalization())
     model.add(Activation("relu"))
     model.add(MaxPooling2D(pool_size=(2, 2)))        
