@@ -38,14 +38,14 @@ def build_model(hp):
 # Model definition 
 # First block
     model.add(Conv2D(
-        hp.Int("conv_1", min_value=32, max_value=300, step=32),
+        hp.Int("conv_1", min_value=32, max_value=64, step=32),
         (3, 3), padding="same",
         kernel_regularizer=l2(0.0001), input_shape=INPUT_SHAPE))
     model.add(BatchNormalization())
     model.add(Activation("relu"))
         
     model.add(Conv2D(
-        hp.Int("conv_2", min_value=32, max_value=150, step=32),
+        hp.Int("conv_2", min_value=32, max_value=64, step=32),
         (3, 3), padding="same",
         kernel_regularizer=l2(0.0001), input_shape=(80, 80, 3)))
     model.add(BatchNormalization())
@@ -60,6 +60,7 @@ def build_model(hp):
         hp.Int("conv_4", min_value=32, max_value=128, step=32),
         (3, 3), padding="same", kernel_regularizer=l2(0.0001)))          
     model.add(Activation("relu"))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2)))                 
  
  # Third block
@@ -70,7 +71,20 @@ def build_model(hp):
         hp.Int("conv_6", min_value=32, max_value=128, step=32),
         (3, 3), padding="same", kernel_regularizer=l2(0.0001)))          
     model.add(Activation("relu"))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2)))   
+
+ # Fourth block
+    model.add(Conv2D(
+        hp.Int("conv_7", min_value=32, max_value=128, step=32),
+        (3, 3), padding="same", kernel_regularizer=l2(0.0001)))
+    model.add(Conv2D(
+        hp.Int("conv_8", min_value=32, max_value=128, step=32),
+        (3, 3), padding="same", kernel_regularizer=l2(0.0001)))          
+    model.add(Activation("relu"))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=(2, 2)))   
+
 
     model.add(Flatten())
     
@@ -129,7 +143,7 @@ def teacherBO_SOTA (images_train, y_train, images_test, y_test):
 
         x=images_train, y=y_train,
         validation_data=(images_test, y_test),
-        batch_size = 32,
+        batch_size = 64,
         callbacks=[callbacks],
         epochs= 32
     )

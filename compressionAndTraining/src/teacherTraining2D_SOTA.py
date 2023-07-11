@@ -1,5 +1,5 @@
 
-from src.modelTeacher import *
+from src.modelTeacher2D_SOTA import *
 
 
 
@@ -7,7 +7,7 @@ from src.modelTeacher import *
 
 def teacherTrainingAfterBPO_SOTA(bestHP, xTrain, xTest, yTrain, yTest, lr):
 
-    model = modelTeacherDefinition_1D(bestHP)
+    model = modelTeacherDefinition_2D_SOTA(bestHP)
 
     adam = Adam(lr)
     model.compile(optimizer=adam, loss=['categorical_crossentropy'], metrics=['accuracy'])

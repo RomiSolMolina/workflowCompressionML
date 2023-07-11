@@ -23,33 +23,58 @@ from tensorflow.keras.layers import Input
 from tensorflow.keras import layers
 
 
-def modelTeacherDefinition_1D(bestHP):
+def modelTeacherDefinition_2D_SOTA(bestHP):
 
-    teacher = keras.Sequential(
+    teacherCNN_SOTA = keras.Sequential(
         [
-            keras.Input(shape=(30,)),
+            keras.Input(shape=(32, 32, 3)),
             
-            layers.Dense(bestHP[0], name='fc1', kernel_regularizer=l2(0.0001)),
-            layers.Activation(activation='relu', name='relu1'),
- 
-            # layers.Dense(200, name='fc3', kernel_regularizer=l2(0.0001)),
-            # layers.Activation(activation='relu', name='relu3'),
-
-            layers.Dense(bestHP[1], name='fc2', kernel_regularizer=l2(0.0001)),
+            layers.Conv2D(bestHP[0], (3, 3), padding="same", name='conv_1', kernel_regularizer=l2(0.0001)),
+            layers.BatchNormalization(),
+            layers.Activation(activation='relu', name='relu1'),        
+            layers.Conv2D(bestHP[1], (3, 3), padding="same", name='conv_2', kernel_regularizer=l2(0.0001)),
+            layers.BatchNormalization(),        
             layers.Activation(activation='relu', name='relu2'),
-            layers.Dense(bestHP[2], name='fc3', kernel_regularizer=l2(0.0001)),
+            layers.MaxPooling2D(pool_size=(2, 2)), 
+            
+            layers.Conv2D(bestHP[2], (3, 3), padding="same", name='conv_3', kernel_regularizer=l2(0.0001)),
+            layers.BatchNormalization(),        
             layers.Activation(activation='relu', name='relu3'),
-            layers.Dense(bestHP[3], name='fc4', kernel_regularizer=l2(0.0001)),
+            layers.Conv2D( (3, 3), padding="same", name='conv_4', kernel_regularizer=l2(0.0001)),
+            layers.BatchNormalization(),          
+            layers.Activation(activation='relu', name='relu3a'),
+            layers.MaxPooling2D(pool_size=(2, 2)),       
+            
+            layers.Conv2D(bestHP[3], (3, 3), padding="same", name='conv_5', kernel_regularizer=l2(0.0001)),
+            layers.Conv2D(bestHP[4], (3, 3), padding="same", name='conv_6', kernel_regularizer=l2(0.0001)),
+            layers.Conv2D(bestHP[5], (3, 3), padding="same", name='conv_6', kernel_regularizer=l2(0.0001)),
+
+            layers.Activation(activation='relu', name='relu3'),
+            layers.MaxPooling2D(pool_size=(2, 2)), 
+            
+            layers.Flatten(),
+            
+            layers.Dense(bestHP[6], name='fc1', kernel_regularizer=l2(0.0001)),
             layers.Activation(activation='relu', name='relu4'),
             
-            layers.Dense(4, name='output', kernel_regularizer=l2(0.0001)),
+            layers.Dense(bestHP[7], name='fc2', kernel_regularizer=l2(0.0001)),
+            layers.Activation(activation='relu', name='relu5'),
+            layers.Dense(bestHP[8], name='fc3', kernel_regularizer=l2(0.0001)),
+            layers.Activation(activation='relu', name='relu6'),
+
+    #     layers.Dense( bestHP.get("fc4"), name='fc4', kernel_regularizer=l2(0.0001)),
+    #     layers.Activation(activation='relu', name='relu4'),
+            
+    #     layers.Dense( bestHP.get("fc5"), name='fc5', kernel_regularizer=l2(0.0001)),
+    #     layers.Activation(activation='relu', name='relu5'),
+            
+            layers.Dense(10, name='output', kernel_regularizer=l2(0.0001)),
             layers.Activation(activation='softmax', name='softmax'),
             
         ],
-        name="teacher",
+        name="teacherCNN_SOTA",
     )
+    teacherCNN_SOTA.summary()
 
-    teacher.summary()
 
-
-    return teacher
+    return teacherCNN_SOTA
