@@ -150,12 +150,7 @@ def teacherBO_SOTA (images_train, y_train, images_test, y_test, N_ITERATIONS_TEA
 
 
     tuner.get_best_hyperparameters(num_trials=1)[0] 
-    
-    print(tuner.get_best_hyperparameters(num_trials=1)[0] )
-    
+        
     bestHP = tuner.get_best_hyperparameters()[0]
-    
-       
-
 
     return bestHP
