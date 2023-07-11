@@ -24,5 +24,5 @@ Efficient end-to-end workflow for deploying DNNs on an SoC/FPGA by integrating h
 - Scikit-learn 1.1.1
 
 ## SoC/FPGA tools
-- Vivado 2019.1 or Vivado 2019.2
+- Vivado Design Suite - HLx Editions 2019.1 or 2019.2
 
