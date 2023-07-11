@@ -25,3 +25,4 @@ Efficient end-to-end workflow for deploying DNNs on an SoC/FPGA by integrating h
 
 ## SoC/FPGA
 - Vivado 2019.1 or Vivado 2019.2
+
