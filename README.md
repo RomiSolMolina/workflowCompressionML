@@ -6,7 +6,7 @@ Efficient end-to-end workflow for deploying DNNs on an SoC/FPGA by integrating h
 
 ## DNN training and compression
 
-![image](https://github.com/RomiSolMolina/workflowCompressionML/assets/13749513/dc4b9b0d-4454-40df-aeaf-7502d29ce8df)
+![image](https://github.com/RomiSolMolina/workflowCompressionML/assets/13749513/05de367e-1ff2-459b-a972-b170e1e807ee)
 
 ## Hardware assessment framework
 
