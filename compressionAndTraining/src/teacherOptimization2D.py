@@ -108,7 +108,7 @@ def teacherBO (images_train, y_train, images_test, y_test):
     tuner = kt.BayesianOptimization(
         build_model,
         objective = "val_accuracy",
-        max_trials = 10,
+        max_trials = 200,
         seed = 37,
         directory = OUTPUT_PATH
 )

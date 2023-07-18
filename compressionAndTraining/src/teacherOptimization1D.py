@@ -91,7 +91,7 @@ def teacherBO_1D(xTrain, xTest, yTrain, yTest):
     tuner = kt.BayesianOptimization(
         build_model_teacher,
         objective = "val_accuracy",
-        max_trials = 2, #config.N_ITERATIONS_TEACHER,
+        max_trials = 200, #config.N_ITERATIONS_TEACHER,
         seed = 37,
         directory = OUTPUT_PATH
     )
