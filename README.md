@@ -27,5 +27,8 @@ Efficient end-to-end workflow for deploying DNNs on an SoC/FPGA by integrating h
 - Vivado Design Suite - HLx Editions 2019.1 or 2019.2
 
 ## Getting started
+
+Repository tree:
+
 - The workflow comprises three main folders: compressionAndTraining, assessmentFramework, and hls4mlIntegration. 
 - The folder integrationPYNQ is for those willing to integrate the ML IP core into the PYNQ framework. 
