@@ -1,6 +1,8 @@
 # Workflow to efficiently compress and deploy DNN classifiers for SoC/FPGA
 
-Efficient end-to-end workflow for deploying DNNs on an SoC/FPGA by integrating hyperparameter tuning through Bayesian optimization with an ensemble of compression techniques (quantization, pruning, and knowledge distillation). The proposed workflow is based on three stages: DNN training and compression, integration with a hardware synthesis tool for ML, and hardware assessment.
+Efficient end-to-end workflow for deploying DNNs on an SoC/FPGA by integrating hyperparameter tuning through Bayesian optimization with an ensemble of compression techniques (quantization, pruning, and knowledge distillation). 
+
+The proposed workflow is based on three stages: DNN training and compression, integration with a hardware synthesis tool for ML, and hardware assessment.
 
 ![image](https://github.com/RomiSolMolina/workflowCompressionML/assets/13749513/56617ba0-e711-4241-b44b-67b1caa40c31)
 
