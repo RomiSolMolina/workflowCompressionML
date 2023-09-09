@@ -16,6 +16,8 @@ The proposed workflow is based on three stages: DNN training and compression, in
 
 
 ## Required libraries and tools
+
+#### Libraries
 - Python 3.9.13
 - Tensorflow 2.4.1
 - Qkeras 0.9.0
