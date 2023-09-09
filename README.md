@@ -15,7 +15,7 @@ The proposed workflow is based on three stages: DNN training and compression, in
 ![image](https://github.com/RomiSolMolina/workflowCompressionML/assets/13749513/833e0652-d0cc-4e96-b6b0-ce70107de034)
 
 
-## Required libraries
+## Required libraries and tools
 - Python 3.9.13
 - Tensorflow 2.4.1
 - Qkeras 0.9.0
@@ -25,10 +25,10 @@ The proposed workflow is based on three stages: DNN training and compression, in
 - Keras-Tuner 1.1.2
 - Scikit-learn 1.1.1
 
-## SoC/FPGA tools
+#### SoC/FPGA tools
 - Vivado Design Suite - HLx Editions 2019.1 or 2019.2
 
-## Getting started
+## What's in this repository?
 
 Repository tree:
 
