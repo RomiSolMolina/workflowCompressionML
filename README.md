@@ -35,4 +35,11 @@ The proposed workflow is based on three stages: DNN training and compression, in
 Repository tree:
 
 - The workflow comprises three main folders: compressionAndTraining, assessmentFramework, and hls4mlIntegration. 
-- The folder integrationPYNQ is for those willing to integrate the ML IP core into the PYNQ framework. 
+- The folder integrationPYNQ is for those willing to integrate the ML IP core into the PYNQ framework.
+
+## Custom datasets
+
+- Available under request
+
+
+
