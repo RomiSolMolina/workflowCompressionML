@@ -37,6 +37,11 @@ Repository tree:
 - The workflow comprises three main folders: compressionAndTraining, assessmentFramework, and hls4mlIntegration. 
 - The folder integrationPYNQ is for those willing to integrate the ML IP core into the PYNQ framework.
 
+## What are the main files?
+
+- To facilitate the use of the repository, there are severals files that the user should take into consideration:
+
+
 ## Custom datasets
 
 - Available under request
