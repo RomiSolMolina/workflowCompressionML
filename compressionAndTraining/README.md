@@ -18,7 +18,7 @@
 
 - **compressionMain.ipynb**: main Jupyter Notebook file to perform model training and compression.
 
-- **compressionStart.py**: a file that contains the selection flow based on the type of signal (1d or 2D).
+- **compressionStart.py**: a file that contains the selection flow based on the type of signal (1D or 2D).
 
 - Several **templates** are provided to define the network topologies and to perform the hyperparameters optimization and training:
     - For 1D signals:
