@@ -39,7 +39,7 @@ Repository tree:
 
 ## What are the main files?
 
-- To facilitate the use of the repository, there are severals files that the user should take into consideration:
+- To facilitate the use of the repository, there are several files that the developer should take into consideration:
 
 
 ## Custom datasets
