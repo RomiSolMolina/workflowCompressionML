@@ -41,11 +41,6 @@ Repository tree:
       
 - The folder integrationPYNQ is for those willing to integrate the ML IP core into the PYNQ framework.
 
-## What are the main files?
-
-- To facilitate the use of the repository, there are several files that the developer should take into consideration for **DNN training and compression** stage:
-
-
 ## Custom datasets
 
 - Available under request.
