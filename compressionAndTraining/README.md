@@ -1,8 +1,5 @@
 # DNN training and compression
 
-### Files:
-- compression.ipynb: Main Jupyter Notebook file to perform model training and compression.
-
 ### Folders: 
 
 - src folder: contains source codes that correspond to auxiliary functions.
@@ -14,4 +11,12 @@
 - Custom datasets will be provided under request.
 - The methodology can be implemented using SOTA datasets.
 
+
+### Files:
+
+- **config.py**: a configuration file to set different variables that are part of the process of the DNN training and compression. The user should modify this file based on his specifications.
+
+- **compressionMain.ipynb**: main Jupyter Notebook file to perform model training and compression.
+
+- **compressionStart.py**: a file that contains the selection flow based on the type of signal (1d or 2D).
 
