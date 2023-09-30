@@ -39,7 +39,7 @@ Repository tree:
 
 ## What are the main files?
 
-- To facilitate the use of the repository, there are several files that the developer should take into consideration for compressionAndTraining stage:
+- To facilitate the use of the repository, there are several files that the developer should take into consideration for **DNN training and compression** stage:
 
 
 ## Custom datasets
