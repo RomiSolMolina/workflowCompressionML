@@ -20,7 +20,7 @@
 
 - **compressionStart.py**: a file that contains the selection flow based on the type of signal (1d or 2D).
 
-- Severals templates are provided to define the network topologies and to perform the hyperparameters optimization and training:
+- Severals **templates** are provided to define the network topologies and to perform the hyperparameters optimization and training:
     - For 1D signals:
       
     - For 2D signals:
