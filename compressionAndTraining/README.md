@@ -11,7 +11,7 @@
 
 ### Datasets
 
-- Custom datasets provided under request
-- The methodology can be implemented using SOTA datasets
+- Custom datasets will be provided under request.
+- The methodology can be implemented using SOTA datasets.
 
 
