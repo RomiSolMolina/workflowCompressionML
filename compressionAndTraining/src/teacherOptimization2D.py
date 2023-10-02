@@ -25,111 +25,48 @@ from tensorflow.keras.layers import Input
 import keras_tuner as kt
 
 
-import src.config
+from src.config import *
+from src.topology.modelTeacher_HPO_2D import *
 
-def build_model(hp):
-    INPUT_SHAPE = (80, 80, 3)
+
+def teacherBO_2D (images_train, y_train, images_test, y_test):
+
+    """ 
+    This function performs huperparameters optimization for the 2D teacher model. 
+    The topology to used for the teacher is defined in src.topology.modelTeacher_HPO_2D
     
-    model = Sequential()
+    """    
 
-
-# Model definition 
-# First block
-    model.add(Conv2D(
-        hp.Int("conv_1", min_value=32, max_value=128, step=32),
-        (3, 3), padding="same",
-        kernel_regularizer=l2(0.0001), input_shape=INPUT_SHAPE))
-    model.add(BatchNormalization())
-    model.add(Activation("relu"))
-        
-    model.add(Conv2D(
-        hp.Int("conv_2", min_value=32, max_value=128, step=32),
-        (3, 3), padding="same",
-        kernel_regularizer=l2(0.0001), input_shape=(80, 80, 3)))
-    model.add(BatchNormalization())
-    model.add(Activation("relu"))
-    model.add(MaxPooling2D(pool_size=(2, 2)))        
-
-# Second block
-    model.add(Conv2D(
-        hp.Int("conv_3", min_value=32, max_value=128, step=32),
-        (3, 3), padding="same", kernel_regularizer=l2(0.0001)))
-    model.add(Conv2D(
-        hp.Int("conv_4", min_value=32, max_value=128, step=32),
-        (3, 3), padding="same", kernel_regularizer=l2(0.0001)))          
-    model.add(Activation("relu"))
-    model.add(MaxPooling2D(pool_size=(2, 2)))                 
-   
-    model.add(Flatten())
-    
-    model.add(Dense(
-        hp.Int("fc1", min_value=10, max_value=50, step=10),
-        kernel_regularizer=l2(0.0001)))
-    model.add(Activation("relu"))
-    model.add(Dense(
-        hp.Int("fc2", min_value=10, max_value=50, step=10),
-        kernel_regularizer=l2(0.0001)))
-    model.add(Activation("relu"))
-    model.add(Dense(
-        hp.Int("fc3", min_value=10, max_value=50, step=10),
-        kernel_regularizer=l2(0.0001)))
-    
-    model.add(Activation("relu"))
-    
-    # Output Layer with Softmax activation
-    model.add(Dense(3, activation='softmax')) 
-     
-    # Initialize the learning rate choices and optimizer
-    lr = hp.Choice("learning_rate",
-                   values=[1e-1, 1e-3, 1e-4])
-    opt = Adam(learning_rate=lr)
-    
-    # Compile the model
-    model.compile(optimizer=opt, loss="categorical_crossentropy",
-        metrics=["accuracy"])
-
-    return model
-
-
-def teacherBO (images_train, y_train, images_test, y_test):
-    
     bestHP = []
-
-    OUTPUT_PATH = "tuner_teacher"
 
     callbacks = [
             tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=10, verbose=1, restore_best_weights=True),
             tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=3, verbose=1),
             ]  
     
-    if (os.path.exists(OUTPUT_PATH) == 'True'):
-        shutil.rmtree(OUTPUT_PATH, ignore_errors = True)
+    if (os.path.exists(OUTPUT_PATH_TEACHER) == 'True'):
+        shutil.rmtree(OUTPUT_PATH_TEACHER, ignore_errors = True)
         
     tuner = kt.BayesianOptimization(
-        build_model,
+        topologyTeacher_HPO_2D,
         objective = "val_accuracy",
-        max_trials = 200,
+        max_trials = N_ITERATIONS_TEACHER,
         seed = 37,
-        directory = OUTPUT_PATH
+        directory = OUTPUT_PATH_TEACHER
 )
 
     tuner.search(
 
         x=images_train, y=y_train,
         validation_data=(images_test, y_test),
-        batch_size = 32,
+        batch_size = BATCH_TEACHER,
         callbacks=[callbacks],
-        epochs= 32
+        epochs= EPOCHS_TEACHER
     )
 
 
     tuner.get_best_hyperparameters(num_trials=1)[0] 
-    
-    #print(summary)
-    
+       
     bestHP = tuner.get_best_hyperparameters()[0]
     
-       
-
-
     return bestHP

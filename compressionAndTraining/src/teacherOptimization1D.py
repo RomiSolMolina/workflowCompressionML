@@ -29,6 +29,7 @@ from tensorflow.keras.layers import Input
 import shutil, sys
 
 from src.config import *
+from src.topology.modelTeacher_HPO_1D import *
 
 # Keras tuner
 # https://www.tensorflow.org/tutorials/keras/keras_tuner
@@ -37,71 +38,34 @@ from src.config import *
 # Defintion of the teacher model. 
 # Architecture: Multi-layer perceptron
 
-def build_model_teacher(hp):
-
-    model = Sequential()
-    inputShape = (30, ) #config.INPUT_SHAPE
-    
-    # Model definition 
-    model.add(Dense(
-        hp.Int("fc1", min_value=32, max_value=300, step=10),
-        kernel_regularizer=l2(0.0001), input_shape=inputShape))
-    model.add(Activation("relu"))
-    model.add(Dense(
-        hp.Int("fc2", min_value=32, max_value=100, step=10),
-        kernel_regularizer=l2(0.0001)))
-    model.add(Activation("relu"))
-    model.add(Dense(
-        hp.Int("fc3", min_value=10, max_value=50, step=10),
-        kernel_regularizer=l2(0.0001)))
-    model.add(Activation("relu"))
-    model.add(Dense(
-        hp.Int("fc4", min_value=10, max_value=50, step=10),
-        kernel_regularizer=l2(0.0001)))
-    model.add(Activation("relu"))
-    
-    # Output Layer with Softmax activation
-    model.add(Dense(4, name='output'))
-    model.add(Activation("softmax"))
-    
-    # Initialize the learning rate choices and optimizer
-    lr = hp.Choice("learning_rate",
-                   values=[1e-1, 1e-3, 1e-4])
-    opt = Adam(learning_rate=lr)
-    
-    # Compile the model
-    model.compile(optimizer=opt, loss="categorical_crossentropy",
-        metrics=["accuracy"])
-
-    return model
 
 
 def teacherBO_1D(xTrain, xTest, yTrain, yTest):
 
-    OUTPUT_PATH = "tuner_teacher"
+
     # Clean OUTPUT_PATH
-    if (os.path.exists(OUTPUT_PATH) == 'True'):
-        shutil.rmtree(OUTPUT_PATH, ignore_errors = True)
+    if (os.path.exists(OUTPUT_PATH_TEACHER) == 'True'):
+        shutil.rmtree(OUTPUT_PATH_TEACHER, ignore_errors = True)
        
     es = EarlyStopping(
         monitor="val_loss",
-        patience= 5, #config.EARLY_STOPPING_PATIENCE,
+        patience= EARLY_STOPPING_PATIENCE_TEACHER,
         restore_best_weights=True)
 
     tuner = kt.BayesianOptimization(
-        build_model_teacher,
+        topologyTeacher1D,
         objective = "val_accuracy",
-        max_trials = 200, #config.N_ITERATIONS_TEACHER,
+        max_trials = N_ITERATIONS_TEACHER, 
         seed = 37,
-        directory = OUTPUT_PATH
+        directory = OUTPUT_PATH_TEACHER
     )
 
     tuner.search(
         x=xTrain, y=yTrain,
         validation_data=(xTest, yTest),
-        batch_size = 32, #config.BS,
+        batch_size = BATCH_TEACHER,
         callbacks=[es],
-        epochs = 32 #config.EPOCHS
+        epochs = EPOCHS_TEACHER
     )
 
     #tuner.get_best_hyperparameters(num_trials=1)[0] 

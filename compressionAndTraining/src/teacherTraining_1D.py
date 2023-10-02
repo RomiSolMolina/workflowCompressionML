@@ -1,10 +1,9 @@
 
 
-
-
 from src.modelTeacher import *
+from src.topology import *
 
-def teacherTrainingAfterBPO(bestHP, xTrain, xTest, yTrain, yTest, lr):
+def teacherTrainingAfterBPO_1D(bestHP, xTrain, xTest, yTrain, yTest, lr):
 
     model = modelTeacherDefinition_1D(bestHP)
 

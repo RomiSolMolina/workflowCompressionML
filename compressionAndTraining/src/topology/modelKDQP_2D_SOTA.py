@@ -30,7 +30,7 @@ from tensorflow.keras.layers import Input
 
 
 
-def modelKDQP(bestHP):
+def topologyKDQP_SOTA_2D(bestHP):
     
     '''
 
@@ -39,7 +39,7 @@ def modelKDQP(bestHP):
     Output: compressed model. 
 
     '''
-    ######## ---------------------------  Model definition - 2D STUDENT -----------------------------------------
+    ######## ---------------------------  Model definition - 2D SOTA STUDENT -----------------------------------------
 
     # Number of bits 
     ## 4-bits
@@ -52,7 +52,7 @@ def modelKDQP(bestHP):
     activationQ = 'quantized_bits(8)'
   
     # Input
-    x = x_in = Input(shape=(80,80,3))
+    x = x_in = Input(shape=(32,32,3))
 
     # Block 1
     x = QConv2DBatchnorm(int(bestHP[0]), kernel_size=(3,3), 
@@ -142,7 +142,7 @@ def modelKDQP(bestHP):
     
     
     # Output Layer with Softmax activation
-    x = QDense(3, name='output',
+    x = QDense(10, name='output',
                 kernel_quantizer=kernelQ, bias_quantizer=activationQ,
                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))(x)
     

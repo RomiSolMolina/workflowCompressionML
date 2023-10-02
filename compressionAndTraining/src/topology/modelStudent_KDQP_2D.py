@@ -30,7 +30,7 @@ from tensorflow.keras.layers import Input
 
 
 
-def modelKDQP_SOTA(bestHP):
+def modelKDQP_2D(bestHP):
     
     '''
 
@@ -39,7 +39,7 @@ def modelKDQP_SOTA(bestHP):
     Output: compressed model. 
 
     '''
-    ######## ---------------------------  Model definition - 2D SOTA STUDENT -----------------------------------------
+    ######## ---------------------------  Model definition - 2D STUDENT -----------------------------------------
 
     # Number of bits 
     ## 4-bits
@@ -52,7 +52,7 @@ def modelKDQP_SOTA(bestHP):
     activationQ = 'quantized_bits(8)'
   
     # Input
-    x = x_in = Input(shape=(32,32,3))
+    x = x_in = Input(shape=(80,80,3))
 
     # Block 1
     x = QConv2DBatchnorm(int(bestHP[0]), kernel_size=(3,3), 
@@ -89,64 +89,66 @@ def modelKDQP_SOTA(bestHP):
     x = MaxPooling2D(pool_size = (2,2),name='pool_1')(x)
 
     # Block 3
-    x = QConv2DBatchnorm(int(bestHP[4]), kernel_size=(3,3), 
-                            padding='same',
-                            kernel_quantizer = kernelQ,
-                            bias_quantizer = biasQ,
-                            kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
-                            name='conv5')(x)
-    x = QActivation(activationQ, name='relu5')(x)
-    x = QConv2DBatchnorm(int(bestHP[5]), kernel_size=(3,3), 
-                            padding='same',
-                            kernel_quantizer = kernelQ,
-                            bias_quantizer = biasQ,
-                            kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
-                            name='conv6')(x) 
-    x = QActivation(activationQ, name='relu6')(x)
-    x = MaxPooling2D(pool_size = (2,2),name='pool_2')(x)
+    # Commented for MobileNetV2
+    # x = QConv2DBatchnorm(int(bestHP[4]), kernel_size=(3,3), 
+    #                         padding='same',
+    #                         kernel_quantizer = kernelQ,
+    #                         bias_quantizer = biasQ,
+    #                         kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
+    #                         name='conv5')(x)
+    # x = QActivation(activationQ, name='relu5')(x)
+    # x = QConv2DBatchnorm(int(bestHP[5]), kernel_size=(3,3), 
+    #                         padding='same',
+    #                         kernel_quantizer = kernelQ,
+    #                         bias_quantizer = biasQ,
+    #                         kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
+    #                         name='conv6')(x) 
+    # x = QActivation(activationQ, name='relu6')(x)
+    # x = MaxPooling2D(pool_size = (2,2),name='pool_2')(x)
 
-    # Block 4
-    x = QConv2DBatchnorm(int(bestHP[6]), kernel_size=(3,3), 
-                            padding='same',
-                            kernel_quantizer = kernelQ,
-                            bias_quantizer = biasQ,
-                            kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
-                            name='conv7')(x)
-    x = QActivation(activationQ,name='relu7')(x)
-    x = QConv2DBatchnorm(int(bestHP[7]), kernel_size=(3,3), 
-                            padding='same',
-                            kernel_quantizer = kernelQ,
-                            bias_quantizer = biasQ,
-                            kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
-                            name='conv8')(x) 
-    x = QActivation(activationQ, name='relu8')(x)
+    # # Block 4
+    # x = QConv2DBatchnorm(int(bestHP[6]), kernel_size=(3,3), 
+    #                         padding='same',
+    #                         kernel_quantizer = kernelQ,
+    #                         bias_quantizer = biasQ,
+    #                         kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
+    #                         name='conv7')(x)
+    # x = QActivation(activationQ,name='relu7')(x)
+    # x = QConv2DBatchnorm(int(bestHP[7]), kernel_size=(3,3), 
+    #                         padding='same',
+    #                         kernel_quantizer = kernelQ,
+    #                         bias_quantizer = biasQ,
+    #                         kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
+    #                         name='conv8')(x) 
+    # x = QActivation(activationQ, name='relu8')(x)
 
-    x = MaxPooling2D(pool_size = (2,2),name='pool_3')(x)
+    # x = MaxPooling2D(pool_size = (2,2),name='pool_3')(x)
                                         
     x = Flatten()(x)
   
-    x = QDense(bestHP[8],
-                 kernel_quantizer=kernelQ, bias_quantizer=activationQ,
-                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))(x)
-    x = QActivation(activation=activationQ,  name='relu1_D')(x)
+    # x = QDense(bestHP[8],
+    #              kernel_quantizer=kernelQ, bias_quantizer=activationQ,
+    #              kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))(x)
+    # x = QActivation(activation=activationQ,  name='relu1_D')(x)
 
-    x = QDense(bestHP[9],
-                 kernel_quantizer=kernelQ, bias_quantizer=activationQ,
-                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))(x)
-    x = QActivation(activation=activationQ,  name='relu2_D')(x)
+    # x = QDense(bestHP[9],
+    #              kernel_quantizer=kernelQ, bias_quantizer=activationQ,
+    #              kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))(x)
+    # x = QActivation(activation=activationQ,  name='relu2_D')(x)
               
-    x = QDense(bestHP[10],
-                 kernel_quantizer=kernelQ, bias_quantizer=activationQ,
-                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))(x)
-    x = QActivation(activation=activationQ,  name='relu3_D')(x)
+    # x = QDense(bestHP[10],
+    #              kernel_quantizer=kernelQ, bias_quantizer=activationQ,
+    #              kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))(x)
+    # x = QActivation(activation=activationQ,  name='relu3_D')(x)
     
     
     # Output Layer with Softmax activation
-    x = QDense(10, name='output',
+    x = QDense(2, name='output',
                 kernel_quantizer=kernelQ, bias_quantizer=activationQ,
                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))(x)
     
-    x_out = QActivation('softmax',name='output_softmax')(x)
+    #x_out = QActivation('softmax', name='output_softmax')(x)
+    x_out = Activation(activation='softmax', name='softmax')(x)
     
     qmodel = Model(inputs=[x_in], outputs=[x_out], name='qkeras')
     

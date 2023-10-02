@@ -23,11 +23,11 @@ from tensorflow.keras.layers import Input
 from tensorflow.keras import layers
 
 
-def modelTeacherDefinition_2D_SOTA(bestHP):
+def topologyTeacher_2D(bestHP):
 
-    teacherCNN_SOTA = keras.Sequential(
+    teacherCNN = keras.Sequential(
         [
-            keras.Input(shape=(32, 32, 3)),
+            keras.Input(shape=(80, 80, 3)),
             
             layers.Conv2D(bestHP[0], (3, 3), padding="same", name='conv_1', kernel_regularizer=l2(0.0001)),
             layers.BatchNormalization(),
@@ -66,9 +66,9 @@ def modelTeacherDefinition_2D_SOTA(bestHP):
             layers.Activation(activation='softmax', name='softmax'),
             
         ],
-        name="teacherCNN_SOTA",
+        name="teacherCNN",
     )
-    teacherCNN_SOTA.summary()
+    teacherCNN.summary()
 
 
-    return teacherCNN_SOTA
+    return teacherCNN

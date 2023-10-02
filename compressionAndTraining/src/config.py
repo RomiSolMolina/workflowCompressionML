@@ -26,7 +26,7 @@ DEPTH = 3
 # -----------------------------------------------------------------
 
 # define the path to the output directory (the algorithm will save intermediate results)
-OUTPUT_PATH = "tunerTeacher"
+OUTPUT_PATH_TEACHER = "tunerTeacher"
 # initialize the input shape and number of classes
 # INPUT_SHAPE = (30,)
 # NUM_CLASSES = 4
@@ -37,8 +37,8 @@ N_ITERATIONS_TEACHER = 200
 # define the total number of epochs to train, batch size, and the
 # early stopping patience
 EPOCHS_TEACHER = 16
-BS_TEACHER = 32
-EARLY_STOPPING_PATIENCE = 5
+BATCH_TEACHER = 32
+EARLY_STOPPING_PATIENCE_TEACHER = 5
 
 N_ITERATIONS_TEACHER = 2
 
@@ -47,14 +47,14 @@ PATH_MODEL_TEACHER = "models/teacherModel.h5"
 # Student optimization and training
 # -----------------------------------------------------------------
 # define the path to the output directory (the algorithm will save intermediate results)
-OUTPUT_PATH = "tunerStudent"
+OUTPUT_PATH_STUDENT = "tunerStudent"
 
 # Number of iterations for BO
 N_ITERATIONS_STUDENT = 2
 
 EPOCHS_STUDENT = 32
-BS_STUDENT = 32
-EARLY_STOPPING_PATIENCE = 5
+BATCH_STUDENT = 32
+EARLY_STOPPING_PATIENCE_STUDENT = 5
 
 # Pruning
 CONSTANT_SPARSITY = 0.5

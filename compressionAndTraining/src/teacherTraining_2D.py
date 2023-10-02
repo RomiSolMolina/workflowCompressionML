@@ -1,16 +1,17 @@
 
-from src.topology.modelTeacher2D_SOTA import *
 
-def teacherTrainingAfterBPO_SOTA(bestHP, xTrain, xTest, yTrain, yTest, lr):
-    print("Tacher SOTA")
+from src.topology.modelTeacher_2D import *
 
-    bestHP = [64, 64, 64, 64, 64, 96, 32, 64, 20, 50, 20]
-    model = topologyTeacher_2D_SOTA(bestHP)
+def teacherTrainingAfterBPO_2D(bestHP, xTrain, xTest, yTrain, yTest, lr):
+
+    # Topology for the teacher model to be trained after hyperparameters optimization - 1D signal
+    model = topologyTeacher_2D(bestHP)
+
 
     adam = Adam(lr)
     model.compile(optimizer=adam, loss=['categorical_crossentropy'], metrics=['accuracy'])
     
-   
+  
     history  = model.fit(x=xTrain, y=yTrain,
                   validation_data=(xTest, yTest), 
                   batch_size = 128,

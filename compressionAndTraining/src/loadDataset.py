@@ -126,7 +126,8 @@ def preproc_dataset_1D(signal_df):
 def loadDataset_1D(root_path, nLabels, samples):
     tmp = 0
 
-    all_files = glob.glob(root_path + "/csv/*.csv")
+    all_files = glob.glob(root_path + "/*.csv")
+    print(all_files)
     li = []
 
     df = pd.DataFrame()
@@ -143,18 +144,18 @@ def loadDataset_1D(root_path, nLabels, samples):
         signal_df_complete = pd.read_csv(filename, index_col=None, header=0)
         li.append(df)
     
-### ---------------------------------
-    SIGNAL_SAT_1 = root_path+"/sat/df_sub_raw_c2_sat1.csv"
-    SIGNAL_SAT_2 = root_path+"/sat/df_sub_raw_c2_sat2.csv"
+
+    SIGNAL_SAT_1 = "dataset/psd/sat/df_sub_raw_c2_sat1.csv"
+    SIGNAL_SAT_2 = "dataset/psd/sat/df_sub_raw_c2_sat2.csv"
     signal_SAT_1 = pd.read_csv(SIGNAL_SAT_1)
     signal_SAT_2 = pd.read_csv(SIGNAL_SAT_2)
 
     signal_df = pd.concat(li, axis=0, ignore_index=True)
     signal_df_sat = pd.concat([signal_SAT_1, signal_SAT_2])
 
-    UNUSED_COLUMNS = ['Unnamed: 0']
-    signal_df = signal_df.drop(columns=UNUSED_COLUMNS)
-    signal_df_sat = signal_df_sat.drop(columns=UNUSED_COLUMNS)
+    # UNUSED_COLUMNS = ['Unnamed: 0']
+    # signal_df = signal_df.drop(columns=UNUSED_COLUMNS)
+    # signal_df_sat = signal_df_sat.drop(columns=UNUSED_COLUMNS)
 
     signal_df_original = signal_df
     signal_df_cluster = signal_df
@@ -163,7 +164,7 @@ def loadDataset_1D(root_path, nLabels, samples):
     
     signal_df_sat['cluster'] = signal_df_sat['cluster'].replace([2],3)
 
-    
+    print(signal_df)
     signal_df_sat = signal_df_sat.astype(int) 
 
     signal_df['cluster'] = signal_df['cluster'].replace([6],0)
@@ -191,8 +192,11 @@ def loadDataset_1D(root_path, nLabels, samples):
     yTest = to_categorical(yTest)
     yTest_Final = to_categorical(yTest_df_Final, nLabels)
 
-    print(len(x))
-    print(len(y))
+    # print(len(x))
+    # print(len(y))
 
-
+    print("Dataset loaded!")
     return xTrain, xTest, xTest_df_Final, yTrain, yTest, yTest_Final
+
+
+

@@ -66,12 +66,12 @@ from src.distillationClassKeras import *
 # Plot confusion matrix
 from src.confMatrix import *
 
-from src.studentCompression import *
-from src.studentOptimization import *
+from compressionAndTraining.src.studentCompression2D import *
+from src.studentOptimization_1D import *
 from src.studentOptimization_1D import *
 from src.teacherOptimization1D import *
 from src.teacherOptimization2D import *
-from src.teacherOptimization2D_SOTA import *
+from compressionAndTraining.src.teacherOptimization2D_SOTA import *
 from src.studentOptimization2D_SOTA import *
 
 from src.teacherTraining import *
@@ -83,67 +83,19 @@ from src.config import *
 # MobileNet
 from keras.applications import MobileNet
 
+from src.auxFunctions import *
+
+from teacherTraining_1D import *
+from teacherTraining_2D import *
 
 
+def startDNNTrainingAndCompression():
 
-# GPU initialization
-os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
-
-import tensorflow as tf
-print("GPUs: ", len(tf.config.experimental.list_physical_devices('GPU')))
-
-import tensorflow as tf
-gpus = tf.config.experimental.list_physical_devices('GPU')
-if gpus:
-    try:
-        for gpu in gpus:
-            tf.config.experimental.set_memory_growth(gpu, True)
-
-    except RuntimeError as e:
-        print(e)
-
-
-# Pixel normalization for datasets composed of images
-
-def normalizationPix(train, test):
-    """
-    The function perform pixel normalization
-    
-    """
-    # convert from integers to floats
-    train_ = train.astype('float32')
-    test_ = test.astype('float32')
-    # normalize to range 0-1
-    train_ = train_ / 255.0
-    test_ = test_ / 255.0
-    # return normalized images
-    
-    return train_, test_
-
-
-def bestHPBO_computation(bestHP_BO, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC):
-    """
-    Grab the best hyperparameters after the optimization process
-    
-    """
-    bestHP = []
-    # Grab hyper-params
-    for i in range (1,UPPER_CONV+1):
-        bestHP.append(bestHP_BO.get(CONV_VAR + str(i)))
-    for j in range (1, UPPER_FC+1):
-        bestHP.append(bestHP_BO.get(FC_VAR + str(j)))
-   
-    print("Best hyper-parameter configuration: ", bestHP)
-
-    return bestHP
-
-
-def startCompression():
     """
     The function performs the training and compression of the teacher and student architectures
     """
 
-    ## Load DATASET
+    ## ----------------  Load DATASET -----------------
 
     if D_SIGNAL == 1:
     # Load 1D signal dataset
@@ -159,30 +111,28 @@ def startCompression():
         y_train = to_categorical(y_train)
         y_test = to_categorical(y_test)
 
-
+    
     ## ----------------  TEACHER optimization -----------------
 
     # Decide if optimize a teacher architecture or load a pre-trained network as teacher
+    # Grab the best hyperparameters
 
     if TEACHER_OP == 0:
         # optimize teacher architecture
         print("Teacher optimization")
-        
+      
         if D_SIGNAL == 1:
             print("1D signal")
             bestHP_BO_teacher = teacherBO_1D(xTrain, xTest, yTrain, yTest)
         elif D_SIGNAL == 2:
             print("2D signal")
-            bestHP_BO_teacher = teacherBO(images_train, y_train, images_test, y_test)
-            # Grab the best hyperparameters
+            bestHP_BO_teacher = teacherBO_2D(images_train, y_train, images_test, y_test)
         else: 
             bestHP_BO_teacher = teacherBO_SOTA(images_train, y_train, images_test, y_test, N_ITERATIONS_TEACHER)
     else: 
 
         # Load pre-trained model
-        
         #teacherModel = load_model('models/CNN/teacher_NEW_v2_ok.h5')    #VGG-16 based
-
         teacherModel = load_model('models/teacherModel_MobileNetV2.h5')
         
         teacherModel.summary()
@@ -199,11 +149,9 @@ def startCompression():
             print(bestHP_BO_teacher)
             
             # Train 1D teacher model
-            teacherModel = teacherTrainingAfterBPO(bestHP_BO_teacher, xTrain, xTest, yTrain, yTest, lr)
-            teacherModel.summary()
+            teacherModel = teacherTrainingAfterBPO_1D(bestHP_BO_teacher, xTrain, xTest, yTrain, yTest, lr)
 
             # Save model 1D teacher model
-            # teacherModel.save("models/teacherFP_1D.h5")
             teacherModel.save(PATH_MODEL_TEACHER)
 
         elif D_SIGNAL == 2:
@@ -214,30 +162,27 @@ def startCompression():
             bestHP_BO_teacher = bestHPBO_computation(bestHP_BO_teacher, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC)
 
             # Train 2D teacher model
-            teacherModel = teacherTrainingAfterBPO(bestHP_BO_teacher, images_train, y_train, teacherModel, lr)
-
-            teacherModel.summary()
+            teacherModel = teacherTrainingAfterBPO_2D(bestHP_BO_teacher, images_train, y_train, teacherModel, lr)
 
             # Save model 2D teacher model
-            # teacherModel.save("models/teacherFP_2D.h5")
             teacherModel.save(PATH_MODEL_TEACHER)
         
         elif D_SIGNAL == 3:
+            
             from src.teacherTraining2D_SOTA import teacherTrainingAfterBPO_SOTA
 
             lr = bestHP_BO_teacher.get('learning_rate')
    
-            # Grab best hyperparams    
+            # Grab best hyperparams - SOTA dataset   
             bestHP_BO_teacher = bestHPBO_computation(bestHP_BO_teacher, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC)
         
             # Train 2D teacher model - SOTA dataset
             teacherModel = teacherTrainingAfterBPO_SOTA(bestHP_BO_teacher, images_train, images_test, y_train, y_test, lr)
-
-            teacherModel.summary()
-
-            # Save model 2D teacher model
-            # teacherModel.save("models/teacherFP_2D_SOTA.h5")
+        
+            # Save model 2D teacher model - SOTA dataset
             teacherModel.save(PATH_MODEL_TEACHER)
+    
+    teacherModel.summary()
 
     # Bayesian optimization for student architecture
     if D_SIGNAL == 1:
@@ -255,13 +200,11 @@ def startCompression():
             
         # Train 1D student model
         studentModel = studentCompression_1D(bestHP_BO_student, xTrain, xTest, yTrain, yTest, teacherModel, lr)
-        studentModel.summary()
-
+      
+        # Save model 1D student model
         studentModel.save(PATH_MODEL_STUDENT)
 
-    # Save model 1D student model
-    #studentModel.save("models/studentModel_1D.h5")
-
+    
     elif D_SIGNAL == 2:
 
         lr = bestHP_BO.get('learning_rate')
@@ -272,11 +215,7 @@ def startCompression():
         # Training to obtain compressed model
         studentModel = studentCompression_2D(bestHP_BO_student, images_train, y_train, teacherModel, lr)
 
-        # Model summary
-        studentModel.summary()
-
         # Save model 2D student model
-        #studentModel.save("models/studentModel_2D.h5")
         studentModel.save(PATH_MODEL_STUDENT)
 
     elif D_SIGNAL == 3:
@@ -289,12 +228,12 @@ def startCompression():
         # Training to obtain compressed model
         studentModel = studentCompression_2D_SOTA(bestHP_BO_student, images_train, images_test, y_train, y_test, teacherModel, lr)
 
-        # Model summary
-        studentModel.summary()
-
         studentModel.save(PATH_MODEL_STUDENT)
         # Save model 2D student model
         #studentModel.save("models/studentModel_2D_SOTA.h5")
+
+    # Model summary
+    studentModel.summary()
 
     # Plot confusion matrix for accuracy evaluation
     if D_SIGNAL == 1:

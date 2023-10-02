@@ -23,7 +23,7 @@ from tensorflow.keras.layers import Input
 from tensorflow.keras import layers
 
 
-def modelTeacherDefinition_1D(bestHP):
+def modelTeacherTopology_1D(bestHP):
 
     teacher = keras.Sequential(
         [
