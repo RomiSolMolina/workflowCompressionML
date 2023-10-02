@@ -8,7 +8,7 @@
 
 ### Datasets
 
-- Custom datasets will be provided under request.
+- Custom datasets will be provided under reasonable request.
 - The methodology can be implemented using SOTA datasets, such as MNIST and CIFAR
 
 
