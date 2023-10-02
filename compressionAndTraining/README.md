@@ -27,6 +27,7 @@
 
 ### How to start? 
 
+### Final remarks
 
 **Have fun!!** 
 And remember, this is a methodology to facilitate the training and compression process when targetting resource-constrained devices, it is not (yet ;) ) an automatic process.
