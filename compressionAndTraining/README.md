@@ -30,9 +30,8 @@
 ### How to start? 
 
 The file **compressionMain.ipynb** has the main function for performing hyperparameters search, training, and compression, including: 
-
     - Load dataset 
-    
+   
     - Hyperparameters optimization for teacher topology
 
     - Training of the teacher model
@@ -43,7 +42,7 @@ The file **compressionMain.ipynb** has the main function for performing hyperpar
     
     - Metric report
     
-    - Teacher and student models save in the folder **models**
+    - Teacher and student models saved in the folder **models**
 
 ### Final remarks
 
