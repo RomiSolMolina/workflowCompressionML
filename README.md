@@ -34,7 +34,7 @@ The proposed workflow is based on three stages: DNN training and compression, in
 
 Repository tree:
 
-- The workflow comprises this main folders:
+- The workflow comprises these main folders:
     - compressionAndTraining,
     - assessmentFramework, 
     - hls4mlIntegration.
