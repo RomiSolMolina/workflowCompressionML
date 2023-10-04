@@ -66,12 +66,10 @@ from src.distillationClassKeras import *
 # Plot confusion matrix
 from src.confMatrix import *
 
-from compressionAndTraining.src.studentCompression2D import *
-from src.studentOptimization_1D import *
-from src.studentOptimization_1D import *
+
 from src.teacherOptimization1D import *
 from src.teacherOptimization2D import *
-from compressionAndTraining.src.teacherOptimization2D_SOTA import *
+from src.teacherOptimization2D_SOTA import *
 from src.studentOptimization2D_SOTA import *
 
 from src.loadDataset import *
@@ -88,6 +86,9 @@ from teacherTraining_1D import *
 from teacherTraining_2D import *
 from studentOptimization_2D import *
 from studentOptimization_1D import *
+
+from studentCompression1D import *
+from src.studentCompression2D import *
 
 def startDNNTrainingAndCompression():
 

@@ -29,34 +29,64 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.layers import Input
 
 
+from src.config import *
+from src.topology.modelStudent_KDQP_1D import *
 
-def modelKDQP_1D(bestHP):
+def studentCompression_1D(bestHP, x_train, y_train, teacher_baseline, lr):
+
+    qmodel = modelKDQP_1D(bestHP)
+
+    ######## ---------------------------  P -----------------------------------------
+
+    NSTEPS = int(31188*0.9) // 128
+    from tensorflow_model_optimization.python.core.sparsity.keras import prune, pruning_callbacks, pruning_schedule
+    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(0.5, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} #2000
+    studentQ = prune.prune_low_magnitude(qmodel, **pruning_params)
+    train_labels = np.argmax(y_train, axis=1)
+
+    # ######## ---------------------------  KD + QAT -----------------------------------------
+
+
+    distilledMLP = Distiller(student=studentQ, teacher=teacher_baseline)
+
+    train = True
+    if train:
+        adam = Adam(lr)
+        distilledMLP.compile(
+        optimizer=adam,
+        metrics=[keras.metrics.SparseCategoricalAccuracy()],
+        student_loss_fn=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        distillation_loss_fn=keras.losses.KLDivergence(),
+        alpha=0.1, 
+        temperature=10,
+    )
+    callbacks = [
+                tf.keras.callbacks.EarlyStopping(patience=10, verbose=1),
+                tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=3, verbose=1),
+                ]  
+    callbacks.append(pruning_callbacks.UpdatePruningStep())
+
+    # Distill teacher to student 
+
+    # Commented for mobileNEtV2
+    #train_labels = np.argmax(y_train, axis=1)
+
+    history = distilledMLP.fit(x_train, y_train, 
+                               batch_size = 32, 
+                               epochs= 64, 
+                               callbacks = callbacks)
     
-    '''
+    # For MobileNetV2 compression
+    #history = distilledCNN.fit(images_train, train_labels, batch_size = 32, epochs= 32, callbacks = callbacks)
 
-    Model to be compressed. Defined with quantization strategies. 
-    Input: best hyper-params from BO process.
-    Output: compressed model. 
+    from qkeras.utils import _add_supported_quantized_objects
+    co = {}
+    _add_supported_quantized_objects(co)
+    model = strip_pruning(distilledMLP.student)
+    model.summary()
 
-    '''
-    ######## ---------------------------  Model definition - 2D STUDENT -----------------------------------------
-
-    # Number of bits 
-    ## 4-bits
-    kernelQ_4b = "quantized_bits(4,2,alpha=1)"
-    biasQ_4b = "quantized_bits(4,2,alpha=1)"
-    activationQ_4b = 'quantized_bits(4, 0)'
-    ## 8-bits
-    kernelQ = "quantized_bits(8,1,alpha=1)"
-    biasQ = "quantized_bits(8,2,alpha=1)"
-    activationQ = 'quantized_bits(8)'
-  
+    model.save(PATH_MODEL_STUDENT)
+    
+    return model
 
     
-    x_out = QActivation('softmax',name='output_softmax')(x)
-    
-    qmodel = Model(inputs=[x_in], outputs=[x_out], name='qkeras')
-    
-    qmodel.summary()
-
-    return qmodel
