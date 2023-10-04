@@ -74,7 +74,6 @@ from src.teacherOptimization2D import *
 from compressionAndTraining.src.teacherOptimization2D_SOTA import *
 from src.studentOptimization2D_SOTA import *
 
-from src.teacherTraining import *
 from src.loadDataset import *
 
 from src.config import *

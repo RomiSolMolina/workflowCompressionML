@@ -1,7 +1,7 @@
 
 
 from src.topology.studentOptimization_1D import *
-
+from src.config import *
 
 def studentBO_1D(xTrain, xTest, yTrain, yTest, teacher_baseline, N_ITERATIONS_STUDENT):
     callbacks = [
@@ -10,10 +10,9 @@ def studentBO_1D(xTrain, xTest, yTrain, yTest, teacher_baseline, N_ITERATIONS_ST
             ]  
     callbacks.append(pruning_callbacks.UpdatePruningStep())
 
-    OUTPUT_PATH = "tuner"
 
-    if (os.path.exists(OUTPUT_PATH) == 'True'):
-        shutil.rmtree(OUTPUT_PATH, ignore_errors = True)
+    if (os.path.exists(OUTPUT_PATH_STUDENT) == 'True'):
+        shutil.rmtree(OUTPUT_PATH_STUDENT, ignore_errors = True)
 
     studentCNN_ = Distiller(student=build_model_QK_student_1D, teacher=teacher_baseline)
         
@@ -22,16 +21,16 @@ def studentBO_1D(xTrain, xTest, yTrain, yTest, teacher_baseline, N_ITERATIONS_ST
         objective = "val_accuracy",
         max_trials = N_ITERATIONS_STUDENT,
         seed = 49,
-        directory = OUTPUT_PATH
+        directory = OUTPUT_PATH_STUDENT
     )
 
     tuner.search(
 
         x=xTrain, y=yTrain,
         validation_data = (xTest, yTest),
-        batch_size = 32,
+        batch_size = BATCH_STUDENT,
         callbacks = [callbacks],
-        epochs = 32
+        epochs = EPOCHS_STUDENT
     )
 
 
