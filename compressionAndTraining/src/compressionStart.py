@@ -93,7 +93,7 @@ from src.studentCompression2D import *
 def startDNNTrainingAndCompression():
 
     """
-    The function performs the training and compression of the teacher and student architectures
+    The function performs training and compression of the teacher and student architectures
     """
 
     ## ----------------  Load DATASET -----------------
