@@ -32,7 +32,7 @@ from qkeras import QDense, QConv2DBatchnorm
 
 from src.distillationClassKeras import *
 from src.config import *
-from src.topology.studentHPO2D_SOTA import *
+from compressionAndTraining.src.topology.student_HPO_2D_SOTA import *
 
 # def build_model_QK_student_SOTA(hp):
 
