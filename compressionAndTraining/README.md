@@ -32,17 +32,17 @@
 The file **compressionMain.ipynb** has the main function for performing hyperparameters search, training, and compression, including: 
     - Load dataset 
    
-    - Hyperparameters optimization for teacher topology
+    - Hyperparameters optimization for teacher topology.
 
-    - Training of the teacher model
+    - Training of the teacher model.
     
-    - Hyperparameters optimization for the student topology (combined with pruning, quantization, and knowledge distillation
+    - Hyperparameters optimization for the student topology (combined with pruning, quantization, and knowledge distillation.
     
-    - Training of the student model (combined with pruning, quantization, and knowledge distillation)
+    - Training of the student model (combined with pruning, quantization, and knowledge distillation).
     
-    - Metric report
+    - Metric report.
     
-    - Teacher and student models saved in the folder **models**
+    - Teacher and student models saved in the folder **models**.
 
 ### Final remarks
 
