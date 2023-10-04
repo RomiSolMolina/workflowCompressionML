@@ -43,7 +43,7 @@ Repository tree:
 
 ## Custom datasets
 
-- Available under request.
+- Available under reasonable request.
 
 ## Final remarks
 
