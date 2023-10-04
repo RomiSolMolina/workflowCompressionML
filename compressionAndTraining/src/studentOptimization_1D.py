@@ -1,6 +1,6 @@
 
 
-from src.topology.studentOptimization_1D import *
+from compressionAndTraining.src.topology.modelStudent_HPO_1D import *
 from src.config import *
 
 def studentBO_1D(xTrain, xTest, yTrain, yTest, teacher_baseline, N_ITERATIONS_STUDENT):

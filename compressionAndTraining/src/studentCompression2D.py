@@ -75,7 +75,7 @@ def studentCompression_2D(bestHP, images_train, y_train, teacher_baseline, lr):
     # Distill teacher to student 
 
     # Commented for mobileNEtV2
-    # train_labels = np.argmax(y_train, axis=1)
+    train_labels = np.argmax(y_train, axis=1)
 
     history = distilledCNN.fit(images_train, train_labels, batch_size = 16, epochs= 64, callbacks = callbacks)
     
