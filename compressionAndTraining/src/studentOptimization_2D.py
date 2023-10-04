@@ -1,5 +1,5 @@
 
-from compressionAndTraining.src.topology.student_HPO_2D import *
+from compressionAndTraining.src.topology.modelStudent_HPO_2D import *
 from src.config import *
 
 def studentBO_2D(images_train, y_train, images_test, y_test, teacher_baseline, N_ITERATIONS_STUDENT):
