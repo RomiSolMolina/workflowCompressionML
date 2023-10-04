@@ -31,145 +31,146 @@ from qkeras import QDense, QConv2DBatchnorm
 
 
 from src.distillationClassKeras import *
-import src.config
+from src.config import *
+from src.topology.studentHPO2D_SOTA import *
 
-def build_model_QK_student_SOTA(hp):
+# def build_model_QK_student_SOTA(hp):
 
-    kernelQ_4b = "quantized_bits(4,2,alpha=1)"
-    kernelQ = "quantized_bits(8,2,alpha=1)"
-    biasQ = "quantized_bits(8,2,alpha=1)"
-    biasQ_4b = "quantized_bits(4,2,alpha=1)"
-    activationQ = 'quantized_relu(8,2)'
-    activationQ_4b = 'quantized_relu(4, 0)'
+#     kernelQ_4b = "quantized_bits(4,2,alpha=1)"
+#     kernelQ = "quantized_bits(8,2,alpha=1)"
+#     biasQ = "quantized_bits(8,2,alpha=1)"
+#     biasQ_4b = "quantized_bits(4,2,alpha=1)"
+#     activationQ = 'quantized_relu(8,2)'
+#     activationQ_4b = 'quantized_relu(4, 0)'
 
-    CONSTANT_SPARSITY = 0.5
+#     CONSTANT_SPARSITY = 0.5
     
-    # INPUT_SHAPE = (32, 32, 3)
-    model = Sequential()
-    # inputShape = (32, 32, 3)
-    chanDim = -1
+#     # INPUT_SHAPE = (32, 32, 3)
+#     model = Sequential()
+#     # inputShape = (32, 32, 3)
+#     chanDim = -1
 
-# First block
+# # First block
 
-    model.add(QConv2DBatchnorm(hp.Int("conv_1", min_value=1, max_value=10, step=1), kernel_size=(3,3), 
-                               padding='same',
-                               kernel_quantizer = kernelQ, 
-                               bias_quantizer = biasQ,
-                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
-                               input_shape=(32, 32, 3)
-                               ))
-    model.add(QActivation(activationQ ,name='relu1'))
+#     model.add(QConv2DBatchnorm(hp.Int("conv_1", min_value=1, max_value=10, step=1), kernel_size=(3,3), 
+#                                padding='same',
+#                                kernel_quantizer = kernelQ, 
+#                                bias_quantizer = biasQ,
+#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True,
+#                                input_shape=(32, 32, 3)
+#                                ))
+#     model.add(QActivation(activationQ ,name='relu1'))
 
-    model.add(QConv2DBatchnorm(hp.Int("conv_2", min_value=1, max_value=10, step=1), 
-                               kernel_size=(3,3), 
-                               padding='same',
-                               kernel_quantizer = kernelQ, 
-                               bias_quantizer = biasQ,
-                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-                               ))
-    model.add(QActivation(activationQ ,name='relu2'))    
+#     model.add(QConv2DBatchnorm(hp.Int("conv_2", min_value=1, max_value=10, step=1), 
+#                                kernel_size=(3,3), 
+#                                padding='same',
+#                                kernel_quantizer = kernelQ, 
+#                                bias_quantizer = biasQ,
+#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+#                                ))
+#     model.add(QActivation(activationQ ,name='relu2'))    
     
-    model.add(MaxPooling2D(pool_size=(2, 2)))        
+#     model.add(MaxPooling2D(pool_size=(2, 2)))        
 
-# Second block
-    model.add(QConv2DBatchnorm(hp.Int("conv_3", min_value=1, max_value=10, step=1), 
-                               kernel_size=(3,3), 
-                               padding='same',
-                               kernel_quantizer = kernelQ, 
-                               bias_quantizer = biasQ,
-                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-                               ))
-    model.add(QActivation(activationQ ,name='relu3'))
+# # Second block
+#     model.add(QConv2DBatchnorm(hp.Int("conv_3", min_value=1, max_value=10, step=1), 
+#                                kernel_size=(3,3), 
+#                                padding='same',
+#                                kernel_quantizer = kernelQ, 
+#                                bias_quantizer = biasQ,
+#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+#                                ))
+#     model.add(QActivation(activationQ ,name='relu3'))
 
-    model.add(QConv2DBatchnorm(hp.Int("conv_4", min_value=1, max_value=10, step=1), 
-                               kernel_size=(3,3), 
-                               padding='same',
-                               kernel_quantizer = kernelQ, 
-                               bias_quantizer = biasQ,
-                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-                               ))
-    model.add(QActivation(activationQ ,name='relu4'))    
+#     model.add(QConv2DBatchnorm(hp.Int("conv_4", min_value=1, max_value=10, step=1), 
+#                                kernel_size=(3,3), 
+#                                padding='same',
+#                                kernel_quantizer = kernelQ, 
+#                                bias_quantizer = biasQ,
+#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+#                                ))
+#     model.add(QActivation(activationQ ,name='relu4'))    
     
-    model.add(MaxPooling2D(pool_size=(2, 2)))    
+#     model.add(MaxPooling2D(pool_size=(2, 2)))    
     
-# Third block
-    model.add(QConv2DBatchnorm(hp.Int("conv_5", min_value=1, max_value=10, step=1), 
-                               kernel_size=(3,3), 
-                               padding='same',
-                               kernel_quantizer = kernelQ, 
-                               bias_quantizer = biasQ,
-                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-                               ))
-    model.add(QActivation(activationQ ,name='relu5'))
+# # Third block
+#     model.add(QConv2DBatchnorm(hp.Int("conv_5", min_value=1, max_value=10, step=1), 
+#                                kernel_size=(3,3), 
+#                                padding='same',
+#                                kernel_quantizer = kernelQ, 
+#                                bias_quantizer = biasQ,
+#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+#                                ))
+#     model.add(QActivation(activationQ ,name='relu5'))
 
-    model.add(QConv2DBatchnorm(hp.Int("conv_6", min_value=1, max_value=10, step=1), 
-                               kernel_size=(3,3), 
-                               padding='same',
-                               kernel_quantizer = kernelQ, 
-                               bias_quantizer = biasQ,
-                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-                               ))
-    model.add(QActivation(activationQ ,name='relu6'))    
+#     model.add(QConv2DBatchnorm(hp.Int("conv_6", min_value=1, max_value=10, step=1), 
+#                                kernel_size=(3,3), 
+#                                padding='same',
+#                                kernel_quantizer = kernelQ, 
+#                                bias_quantizer = biasQ,
+#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+#                                ))
+#     model.add(QActivation(activationQ ,name='relu6'))    
 
     
-# Fourth block    
-    model.add(QConv2DBatchnorm(hp.Int("conv_7", min_value=1, max_value=10, step=1), 
-                               kernel_size=(3,3), 
-                               padding='same',
-                               kernel_quantizer = kernelQ, 
-                               bias_quantizer = biasQ,
-                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-                               ))
-    model.add(QActivation(activationQ ,name='relu7'))
+# # Fourth block    
+#     model.add(QConv2DBatchnorm(hp.Int("conv_7", min_value=1, max_value=10, step=1), 
+#                                kernel_size=(3,3), 
+#                                padding='same',
+#                                kernel_quantizer = kernelQ, 
+#                                bias_quantizer = biasQ,
+#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+#                                ))
+#     model.add(QActivation(activationQ ,name='relu7'))
 
-    model.add(QConv2DBatchnorm(hp.Int("conv_8", min_value=1, max_value=10, step=1), 
-                               kernel_size=(3,3), 
-                               padding='same',
-                               kernel_quantizer = kernelQ, 
-                               bias_quantizer = biasQ,
-                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-                               ))
-    model.add(QActivation(activationQ ,name='relu8'))    
+#     model.add(QConv2DBatchnorm(hp.Int("conv_8", min_value=1, max_value=10, step=1), 
+#                                kernel_size=(3,3), 
+#                                padding='same',
+#                                kernel_quantizer = kernelQ, 
+#                                bias_quantizer = biasQ,
+#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+#                                ))
+#     model.add(QActivation(activationQ ,name='relu8'))    
     
 
-    model.add(MaxPooling2D(pool_size=(2, 2)))    
+#     model.add(MaxPooling2D(pool_size=(2, 2)))    
     
-    model.add(Flatten())
+#     model.add(Flatten())
     
-    model.add(QDense(hp.Int("fc1", min_value=5, max_value=10, step=10),
-                 kernel_quantizer=quantized_bits(8,1,alpha=1), bias_quantizer=quantized_bits(8,1,alpha=1),
-                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))),
-    model.add(QActivation(activation=quantized_relu(8),  name='relu1_D'))
-    model.add(QDense(hp.Int("fc2", min_value=5, max_value=10, step=10),
-                 kernel_quantizer=quantized_bits(8,1,alpha=1), bias_quantizer=quantized_bits(8,1,alpha=1),
-                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))),
-    model.add(QActivation(activation=quantized_relu(8),  name='relu2_D'))
-    model.add(QDense(hp.Int("fc3", min_value=5, max_value=10, step=10),
-                 kernel_quantizer=quantized_bits(8,1,alpha=1), bias_quantizer=quantized_bits(8,1,alpha=1),
-                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))),
-    model.add(QActivation(activation=quantized_relu(8),  name='relu3_D'))
+#     model.add(QDense(hp.Int("fc1", min_value=5, max_value=10, step=10),
+#                  kernel_quantizer=quantized_bits(8,1,alpha=1), bias_quantizer=quantized_bits(8,1,alpha=1),
+#                  kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))),
+#     model.add(QActivation(activation=quantized_relu(8),  name='relu1_D'))
+#     model.add(QDense(hp.Int("fc2", min_value=5, max_value=10, step=10),
+#                  kernel_quantizer=quantized_bits(8,1,alpha=1), bias_quantizer=quantized_bits(8,1,alpha=1),
+#                  kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))),
+#     model.add(QActivation(activation=quantized_relu(8),  name='relu2_D'))
+#     model.add(QDense(hp.Int("fc3", min_value=5, max_value=10, step=10),
+#                  kernel_quantizer=quantized_bits(8,1,alpha=1), bias_quantizer=quantized_bits(8,1,alpha=1),
+#                  kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))),
+#     model.add(QActivation(activation=quantized_relu(8),  name='relu3_D'))
     
     
-    # Output Layer with Softmax activation
-    model.add(QDense(10, name='output',
-                kernel_quantizer=quantized_bits(8,1,alpha=1), bias_quantizer=quantized_bits(8,1,alpha=1),
-                kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))),
-    model.add(Activation(activation='softmax', name='softmax'))
+#     # Output Layer with Softmax activation
+#     model.add(QDense(10, name='output',
+#                 kernel_quantizer=quantized_bits(8,1,alpha=1), bias_quantizer=quantized_bits(8,1,alpha=1),
+#                 kernel_initializer='lecun_uniform', kernel_regularizer=l1(0.001))),
+#     model.add(Activation(activation='softmax', name='softmax'))
  
-    # initialize the learning rate choices and optimizer
-    lr = hp.Choice("learning_rate",
-                   values=[1e-1, 1e-3, 1e-4])
-    opt = Adam(learning_rate=lr)
+#     # initialize the learning rate choices and optimizer
+#     lr = hp.Choice("learning_rate",
+#                    values=[1e-1, 1e-3, 1e-4])
+#     opt = Adam(learning_rate=lr)
     
-    NSTEPS = int(31188*0.9) // 128
-    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(CONSTANT_SPARSITY, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} #2000
-    model = prune.prune_low_magnitude(model, **pruning_params)
+#     NSTEPS = int(31188*0.9) // 128
+#     pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(CONSTANT_SPARSITY, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} #2000
+#     model = prune.prune_low_magnitude(model, **pruning_params)
     
-    # compile the model
-    model.compile(optimizer=opt, loss="categorical_crossentropy",
-        metrics=["accuracy"])
+#     # compile the model
+#     model.compile(optimizer=opt, loss="categorical_crossentropy",
+#         metrics=["accuracy"])
 
-    return model
+#     return model
 
 
 def studentBO_2D_SOTA(images_train, y_train, images_test, y_test, teacher_baseline, N_ITERATIONS_STUDENT):
@@ -179,28 +180,26 @@ def studentBO_2D_SOTA(images_train, y_train, images_test, y_test, teacher_baseli
             ]  
     callbacks.append(pruning_callbacks.UpdatePruningStep())
 
-    OUTPUT_PATH = "tuner"
+    if (os.path.exists(OUTPUT_PATH_STUDENT) == 'True'):
+        shutil.rmtree(OUTPUT_PATH_STUDENT, ignore_errors = True)
 
-    if (os.path.exists(OUTPUT_PATH) == 'True'):
-        shutil.rmtree(OUTPUT_PATH, ignore_errors = True)
-
-    studentCNN_ = Distiller(student=build_model_QK_student_SOTA, teacher=teacher_baseline)
+    studentCNN_ = Distiller(student=topology_student_SOTA, teacher=teacher_baseline)
         
     tuner = kt.BayesianOptimization(
         studentCNN_.student,
         objective = "val_accuracy",
         max_trials = N_ITERATIONS_STUDENT,
         seed = 49,
-        directory = OUTPUT_PATH
+        directory = OUTPUT_PATH_STUDENT
     )
 
     tuner.search(
 
         x=images_train, y=y_train,
         validation_data=(images_test, y_test),
-        batch_size= 32,
+        batch_size= BATCH_STUDENT,
         callbacks=[callbacks],
-        epochs= 32
+        epochs= EPOCHS_STUDENT
     )
 
 

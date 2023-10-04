@@ -33,7 +33,7 @@ from qkeras import QDense, QConv2DBatchnorm
 from src.distillationClassKeras import *
 import src.config
 
-def build_model_QK_student_SOTA(hp):
+def topology_student_SOTA(hp):
 
     kernelQ_4b = "quantized_bits(4,2,alpha=1)"
     kernelQ = "quantized_bits(8,2,alpha=1)"
@@ -172,42 +172,4 @@ def build_model_QK_student_SOTA(hp):
     return model
 
 
-def studentBO_2D_SOTA(images_train, y_train, images_test, y_test, teacher_baseline, N_ITERATIONS_STUDENT):
-    callbacks = [
-            tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=10, verbose=1, restore_best_weights=True),
-            tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=3, verbose=1),
-            ]  
-    callbacks.append(pruning_callbacks.UpdatePruningStep())
-
-    OUTPUT_PATH = "tuner"
-
-    if (os.path.exists(OUTPUT_PATH) == 'True'):
-        shutil.rmtree(OUTPUT_PATH, ignore_errors = True)
-
-    studentCNN_ = Distiller(student=build_model_QK_student_SOTA, teacher=teacher_baseline)
-        
-    tuner = kt.BayesianOptimization(
-        studentCNN_.student,
-        objective = "val_accuracy",
-        max_trials = N_ITERATIONS_STUDENT,
-        seed = 49,
-        directory = OUTPUT_PATH
-    )
-
-    tuner.search(
-
-        x=images_train, y=y_train,
-        validation_data=(images_test, y_test),
-        batch_size= 32,
-        callbacks=[callbacks],
-        epochs= 32
-    )
-
-
-    tuner.get_best_hyperparameters(num_trials=1)[0] 
-    #print(summary)
-    
-    bestHP = tuner.get_best_hyperparameters()[0]
-
-
-    return bestHP
+ù
