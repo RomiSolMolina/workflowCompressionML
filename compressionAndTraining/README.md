@@ -11,7 +11,6 @@
 - Custom datasets will be provided under reasonable request.
 - The methodology can be implemented using SOTA datasets, such as MNIST and CIFAR.
 
-
 ### Files:
 
 - **config.py**: a configuration file to set different variables that are part of the process of the DNN training and compression. The user should modify this file based on his specifications.
