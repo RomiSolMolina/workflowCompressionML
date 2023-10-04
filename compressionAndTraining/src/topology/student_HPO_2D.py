@@ -94,46 +94,46 @@ def build_model_QK_student(hp):
     
 # Third block
 # Commented for MobileNetV2
-#     model.add(QConv2DBatchnorm(hp.Int("conv_5", min_value=1, max_value=10, step=1), 
-#                                kernel_size=(3,3), 
-#                                padding='same',
-#                                kernel_quantizer = kernelQ, 
-#                                bias_quantizer = biasQ,
-#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-#                                ))
-#     model.add(QActivation(activationQ ,name='relu5'))
+    model.add(QConv2DBatchnorm(hp.Int("conv_5", min_value=1, max_value=10, step=1), 
+                               kernel_size=(3,3), 
+                               padding='same',
+                               kernel_quantizer = kernelQ, 
+                               bias_quantizer = biasQ,
+                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+                               ))
+    model.add(QActivation(activationQ ,name='relu5'))
 
-#     model.add(QConv2DBatchnorm(hp.Int("conv_6", min_value=1, max_value=10, step=1), 
-#                                kernel_size=(3,3), 
-#                                padding='same',
-#                                kernel_quantizer = kernelQ, 
-#                                bias_quantizer = biasQ,
-#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-#                                ))
-#     model.add(QActivation(activationQ ,name='relu6'))    
+    model.add(QConv2DBatchnorm(hp.Int("conv_6", min_value=1, max_value=10, step=1), 
+                               kernel_size=(3,3), 
+                               padding='same',
+                               kernel_quantizer = kernelQ, 
+                               bias_quantizer = biasQ,
+                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+                               ))
+    model.add(QActivation(activationQ ,name='relu6'))    
 
     
-# # Fourth block    
-#     model.add(QConv2DBatchnorm(hp.Int("conv_7", min_value=1, max_value=10, step=1), 
-#                                kernel_size=(3,3), 
-#                                padding='same',
-#                                kernel_quantizer = kernelQ, 
-#                                bias_quantizer = biasQ,
-#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-#                                ))
-#     model.add(QActivation(activationQ ,name='relu7'))
+# Fourth block    
+    model.add(QConv2DBatchnorm(hp.Int("conv_7", min_value=1, max_value=10, step=1), 
+                               kernel_size=(3,3), 
+                               padding='same',
+                               kernel_quantizer = kernelQ, 
+                               bias_quantizer = biasQ,
+                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+                               ))
+    model.add(QActivation(activationQ ,name='relu7'))
 
-#     model.add(QConv2DBatchnorm(hp.Int("conv_8", min_value=1, max_value=10, step=1), 
-#                                kernel_size=(3,3), 
-#                                padding='same',
-#                                kernel_quantizer = kernelQ, 
-#                                bias_quantizer = biasQ,
-#                                kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
-#                                ))
-#     model.add(QActivation(activationQ ,name='relu8'))    
+    model.add(QConv2DBatchnorm(hp.Int("conv_8", min_value=1, max_value=10, step=1), 
+                               kernel_size=(3,3), 
+                               padding='same',
+                               kernel_quantizer = kernelQ, 
+                               bias_quantizer = biasQ,
+                               kernel_initializer='lecun_uniform', kernel_regularizer=l2(0.0001), use_bias=True
+                               ))
+    model.add(QActivation(activationQ ,name='relu8'))    
     
 
-#     model.add(MaxPooling2D(pool_size=(2, 2)))    
+    model.add(MaxPooling2D(pool_size=(2, 2)))    
     
     model.add(Flatten())
     
@@ -172,43 +172,3 @@ def build_model_QK_student(hp):
 
     return model
 
-
-def studentBO_2D(images_train, y_train, images_test, y_test, teacher_baseline, N_ITERATIONS_STUDENT):
-    callbacks = [
-            tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=10, verbose=1, restore_best_weights=True),
-            tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=3, verbose=1),
-            ]  
-    callbacks.append(pruning_callbacks.UpdatePruningStep())
-
-    OUTPUT_PATH = "tuner"
-
-    if (os.path.exists(OUTPUT_PATH) == 'True'):
-        shutil.rmtree(OUTPUT_PATH, ignore_errors = True)
-
-    studentCNN_ = Distiller(student=build_model_QK_student, teacher=teacher_baseline)
-        
-    tuner = kt.BayesianOptimization(
-        studentCNN_.student,
-        objective = "val_accuracy",
-        max_trials = N_ITERATIONS_STUDENT,
-        seed = 49,
-        directory = OUTPUT_PATH
-    )
-
-    tuner.search(
-
-        x=images_train, y=y_train,
-        validation_data=(images_test, y_test),
-        batch_size= 32,
-        callbacks=[callbacks],
-        epochs= 32
-    )
-
-
-    tuner.get_best_hyperparameters(num_trials=1)[0] 
-    #print(summary)
-    
-    bestHP = tuner.get_best_hyperparameters()[0]
-
-
-    return bestHP

@@ -86,7 +86,8 @@ from src.auxFunctions import *
 
 from teacherTraining_1D import *
 from teacherTraining_2D import *
-
+from studentOptimization_2D import *
+from studentOptimization_1D import *
 
 def startDNNTrainingAndCompression():
 
