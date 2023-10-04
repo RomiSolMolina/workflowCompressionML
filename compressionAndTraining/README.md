@@ -21,11 +21,15 @@
 - **compressionStart.py**: a file that contains the selection flow based on the type of signal (1D or 2D).
 
 - Several **templates** are located in the folder **topology** and are provided to define the network topologies and to perform the hyperparameters optimization and training:
-    - For 1D signals:
+    - For 1D signals: topologies for teacher, and student are provided (for both, hyperparameters optimization and final model training). 
       
-    - For 2D signals:
+    - For 2D signals: topologies for teacher, and student are provided (for both, hyperparameters optimization and final model training).
+ 
+      The developer can modify these files to adapt the workflow to his needs.
 
 ### How to start? 
+
+T
 
 ### Final remarks
 
