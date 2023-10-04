@@ -13,7 +13,7 @@
 
 ### Files:
 
-- **config.py**: a configuration file to set different variables that are part of the process of the DNN training and compression. The user should modify this file based on his specifications.
+- **config.py**: a configuration file to set different variables that are part of the process of the DNN training and compression. The user should modify this file based on the specific requeriments.
 
 - **compressionMain.ipynb**: main Jupyter Notebook file to perform model training and compression.
 
