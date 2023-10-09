@@ -32,16 +32,14 @@ from tensorflow_model_optimization.sparsity import keras as sparsity
 
 from src.distillationClassKeras import *
 
-# from src.modelKDQP import *
-# from src.modelKDQP_1D import *
-# from src.modelKDQP_2D_SOTA import *
-from src.topology.modelStudent_KDQP_2D import *
+
+from src.topology.modelStudent_KDQP_2D_SOTA import *
 from src.config import *
 
 
 def studentCompression_2D_SOTA(bestHP, images_train, y_train, teacher_baseline, lr):
 
-    qmodel = modelKDQP_2D(bestHP)
+    qmodel = modelKDQP_2D_SOTA(bestHP)
 
     ######## ---------------------------  P -----------------------------------------
 
