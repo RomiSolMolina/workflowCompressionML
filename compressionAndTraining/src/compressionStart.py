@@ -78,7 +78,7 @@ from src.config import *
 
 # Pre-trained model 
 # MobileNet
-from keras.applications import MobileNet
+# from keras.applications import MobileNet
 
 from src.auxFunctions import *
 
@@ -86,7 +86,7 @@ from teacherTraining_1D import *
 from teacherTraining_2D import *
 from studentOptimization_2D import *
 from studentOptimization_1D import *
-
+from src.studentCompression2DSOTA import *
 from studentCompression1D import *
 from src.studentCompression2D import *
 
@@ -96,7 +96,7 @@ def startDNNTrainingAndCompression():
     The function performs training and compression of the teacher and student architectures
     """
 
-    ## ----------------  Load DATASET -----------------
+    ### LOAD DATASET ------------------------- ###
 
     if D_SIGNAL == 1:
     # Load 1D signal dataset
@@ -113,7 +113,7 @@ def startDNNTrainingAndCompression():
         y_test = to_categorical(y_test)
 
     
-    ## ----------------  TEACHER optimization -----------------
+    ### BO HYPERPARAMETER OPTIMIZATION FOR TEACHER ARCHITECTURE ------------------------- ###
 
     # Decide if optimize a teacher architecture or load a pre-trained network as teacher
     # Grab the best hyperparameters
@@ -138,7 +138,7 @@ def startDNNTrainingAndCompression():
         
         teacherModel.summary()
 
-    ## ----------------- TEACHER training -----------------
+    ### TEACHER TRAINING ------------------------- ###
 
     # Grab the best hyperparameters for teacher training
     if TEACHER_OP == 0:
@@ -185,13 +185,16 @@ def startDNNTrainingAndCompression():
     
     teacherModel.summary()
 
-    # Bayesian optimization for student architecture
+    ### BO HYPERPARAMETERS TUNING FOR STUDENT ARCHITECTURE  ------------------------- ###
+    
     if D_SIGNAL == 1:
         bestHP_BO = studentBO_1D(xTrain, xTest, yTrain, yTest, teacherModel, N_ITERATIONS_STUDENT)
     elif D_SIGNAL == 2:
         bestHP_BO = studentBO_2D(images_train, y_train, images_test, y_test, teacherModel, N_ITERATIONS_STUDENT)
     elif D_SIGNAL == 3:
         bestHP_BO = studentBO_2D_SOTA(images_train, y_train, images_test, y_test, teacherModel, N_ITERATIONS_STUDENT)
+
+    ### TRAINING STUDENT ARCHITECTURE  ------------------------- ###
 
     if D_SIGNAL == 1:
         lr = bestHP_BO.get('learning_rate')
@@ -205,7 +208,6 @@ def startDNNTrainingAndCompression():
         # Save model 1D student model
         studentModel.save(PATH_MODEL_STUDENT)
 
-    
     elif D_SIGNAL == 2:
 
         lr = bestHP_BO.get('learning_rate')
@@ -236,6 +238,7 @@ def startDNNTrainingAndCompression():
     # Model summary
     studentModel.summary()
 
+    ### CONFUSION MATRIX ------------------------- ###
     # Plot confusion matrix for accuracy evaluation
     if D_SIGNAL == 1:
         # 1D signal
