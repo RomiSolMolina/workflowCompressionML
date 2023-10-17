@@ -134,7 +134,7 @@ def startDNNTrainingAndCompression():
 
         # Load pre-trained model
         teacherModel = load_model('models/teacherModel_MobileNetV2.h5')
-        
+        #teacherModel = load_model('models/CNN/teacher_NEW_v2_ok.h5')    #VGG-16 based
         teacherModel.summary()
 
     ### TEACHER TRAINING ------------------------- ###
