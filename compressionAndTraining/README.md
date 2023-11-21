@@ -39,6 +39,27 @@ The file **compressionMain.ipynb** has the main function for performing hyperpar
     - Metric report.
     - Teacher and student models saved in the folder **models**.
 
+### How to achieve KD and QAP simultaneously?
+The process to achieve KD and QAP is as follows: 
+
+The student model is previously defined with quantization and pruning strategies, to perform QAP during the distillation process, which means that the quantized model is obtained through the function
+
+     qmodel = modelKDQP_1D(bestHP)  # modelKDQP_1D() construct the model with the parameters obtained after the HPO.
+
+Then, the pruning strategy is configured and applied to the model. 
+ 
+     NSTEPS = int(31188*0.9)
+    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(0.5, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} 
+    studentQ = prune.prune_low_magnitude(qmodel, **pruning_params)
+
+The distiller class is called by Distiller(student, teacher) function, where the parameters are the student model (studentQ) and the trained teacher. This function will start the distillation process. 
+
+    distilledMLP = Distiller(student=studentQ, teacher=teacher_baseline) 
+
+In this manner, the distillation process is unified with QAP.
+
+
+
 ### Final remarks
 
 **Have fun!!** 
