@@ -49,7 +49,9 @@ The student model is previously defined with quantization and pruning strategies
 Then, the pruning strategy is configured and applied to the model. 
  
      NSTEPS = int(31188*0.9)
+     
     pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(0.5, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} 
+    
     studentQ = prune.prune_low_magnitude(qmodel, **pruning_params)
 
 The distiller class is called by Distiller(student, teacher) function, where the parameters are the student model (studentQ) and the trained teacher. This function will start the distillation process. 
