@@ -49,8 +49,13 @@ The student model is previously defined with quantization and pruning strategies
 Then, the pruning strategy is configured and applied to the model. 
  
     NSTEPS = int(31188*0.9)
-     
-    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(0.5, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} 
+
+    SPARSITY_FACTOR = 0.5
+    
+    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(SPARSITY_FACTOR, 
+                                                                             begin_step = NSTEPS*2,  
+                                                                             end_step = NSTEPS*10, 
+                                                                             frequency = NSTEPS)} 
     
     studentQ = prune.prune_low_magnitude(qmodel, **pruning_params)
 
