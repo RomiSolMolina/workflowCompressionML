@@ -44,11 +44,11 @@ The process to achieve KD and QAP is as follows:
 
 The student model is previously defined with quantization and pruning strategies, to perform QAP during the distillation process, which means that the quantized model is obtained through the function
 
-     qmodel = modelKDQP_1D(bestHP)  # modelKDQP_1D() construct the model with the parameters obtained after the HPO.
+    qmodel = modelKDQP_1D(bestHP)  # modelKDQP_1D() construct the model with the parameters obtained after the HPO.
 
 Then, the pruning strategy is configured and applied to the model. 
  
-     NSTEPS = int(31188*0.9)
+    NSTEPS = int(31188*0.9)
      
     pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(0.5, begin_step = NSTEPS*2,  end_step = NSTEPS*10, frequency = NSTEPS)} 
     
