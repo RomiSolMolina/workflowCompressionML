@@ -59,7 +59,7 @@ Then, the pruning strategy is configured and applied to the model.
     
     studentQ = prune.prune_low_magnitude(qmodel, **pruning_params)
 
-The distiller class is called by Distiller(student, teacher) function, where the parameters are the student model (studentQ) and the trained teacher. This function will start the distillation process. 
+The Distiller(student, teacher) function, where the parameters are the student model (studentQ) and the trained teacher, will start the distillation process. 
 
     distilledMLP = Distiller(student=studentQ, teacher=teacher_baseline) 
 
