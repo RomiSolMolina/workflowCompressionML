@@ -61,7 +61,6 @@ The distiller class is called by Distiller(student, teacher) function, where the
 In this manner, the distillation process is unified with QAP.
 
 
-
 ### Final remarks
 
 **Have fun!!** 
