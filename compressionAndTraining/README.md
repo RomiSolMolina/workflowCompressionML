@@ -14,7 +14,7 @@ This project provides a modular framework for training and compressing deep neur
 |----------------------|-------------|
 | **Quantization**     | QKeras layers (QConv, QDense, QActivation) with `quantized_bits` |
 | **Pruning**          | TF-MOT pruning via `prune_low_magnitude()` and `ConstantSparsity` |
-| **KD Distillation**  | Student mimics teacher's logits with temperature scaling and α-weighted loss |
+| **Knowledge Distillation**  | Student mimics teacher's logits with temperature scaling and α-weighted loss |
 | **Bayesian Optimization** | Keras Tuner integration for HPO (Bayesian) on student architectures |
 | **1D/2D Support**    | Works for both tabular and image data (`D_SIGNAL` switchable) |
 
@@ -50,7 +50,7 @@ This project provides a modular framework for training and compressing deep neur
 
 If needed, install dependencies
 ```bash
-pip install -r ../requeriments/requirements.txt
+pip install -r ../environment/requirements.txt
 ```
 
 ### 2. Launch the compression and training pipeline
