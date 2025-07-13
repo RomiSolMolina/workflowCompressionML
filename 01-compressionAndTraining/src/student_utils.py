@@ -108,7 +108,7 @@ def train_student(bestHP, teacher_model,
 
     # === Save model ===
     studentModel.save(model_path)
-    print(f"[INFO] Model saved to: {model_path}")
+    # print(f"Model saved to: {model_path}")
 
 
     # studentModel.save(StudentConfig.MODEL_PATH)
