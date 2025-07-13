@@ -29,7 +29,11 @@ def train_teacher(bestHP, xTrain=None, xTest=None, yTrain=None, yTest=None,
     """
     Train the teacher model using the unified training function.
     """
-    lr = bestHP.get("learning_rate")
+    try:
+        lr = bestHP.get("learning_rate")
+    except:
+        lr = 1e-3  # fallback
+
     bestHP = bestHPBO_computation(bestHP, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC)
 
     if DatasetConfig.D_SIGNAL == 1:
