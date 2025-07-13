@@ -4,9 +4,9 @@ import shutil
 import tensorflow as tf
 import keras_tuner as kt
 from src.config import TeacherConfig, DatasetConfig
-from src.topology.teacher.modelTeacher_hpo_1d import topologyTeacher_HPO_1D
-from src.topology.teacher.modelTeacher_hpo_2d import topologyTeacher_HPO_2D
-from src.topology.teacher.modelTeacher_hpo_2d_sota import topologyTeacher_HPO_2D_SOTA
+from src.topology.teacher.teacher_1d import topologyTeacher_HPO_1D
+from src.topology.teacher.teacher_2d import topologyTeacher_HPO_2D
+from src.topology.teacher.teacher_2d_sota import topologyTeacher_HPO_2D_SOTA
 
 
 def teacherBO(images_train=None, y_train=None, images_test=None, y_test=None,
