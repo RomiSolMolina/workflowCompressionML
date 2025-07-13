@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 @dataclass
 class DatasetConfig:
-    D_SIGNAL: int = 1
+    D_SIGNAL: int = 1   #1: 1D, 2: 2D, 3: Sota dataset
     ROOT_PATH_1D: Path = Path("/media/ro/Data/datasets/gammaNeutron_diamondDetector/fft/")
     ROOT_PATH_2D: Path = Path("/home/ro/kaleido/datasets/unpolished")
     nLabels_1D: int = 2

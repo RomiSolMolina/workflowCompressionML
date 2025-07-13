@@ -43,6 +43,10 @@ def startDNNTrainingAndCompression(
             CompressionMode.Q_KD,
             CompressionMode.Q_KD_PRUNING
         ]
+        use_lowrank = SELECTED_COMPRESSION in [
+            CompressionMode.Q_LOW_RANK,
+        ]
+
 
     print(f"\n[INFO] Selected Compression Strategy: {selected_compression}")
     print(f"[INFO] use_kd={use_kd}, use_quant={use_quant}, use_prune={use_prune}")

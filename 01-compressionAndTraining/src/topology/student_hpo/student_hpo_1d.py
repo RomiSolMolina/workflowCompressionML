@@ -54,7 +54,7 @@ def modelStudent1D(hp, use_quant=True, use_prune=True):
 
     # === Optional pruning === #
     if use_prune:
-        n_samples = 31188
+        n_samples = DatasetConfig.SAMPLES
         batch_size = 128
         n_steps_per_epoch = int(n_samples * 0.9) // batch_size
         pruning_params = {

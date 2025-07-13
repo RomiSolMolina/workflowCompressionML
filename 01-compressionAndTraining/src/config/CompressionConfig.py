@@ -9,8 +9,9 @@ class CompressionMode(Enum):
     KD = "kd"
     Q_KD = "quant+kd"
     Q_PRUNING = "quant+prune"
+    Q_LOW_RANK = "q_lowrank"
     Q_KD_PRUNING = "quant+kd+prune"
 
 # SELECT THE STRATEGY
-# SELECTED_COMPRESSION = CompressionMode.Q_KD_PRUNING
-SELECTED_COMPRESSION = CompressionMode.PRUNING
+SELECTED_COMPRESSION = CompressionMode.Q_KD_PRUNING
+# SELECTED_COMPRESSION = CompressionMode.BASELINE

@@ -7,17 +7,19 @@ from src.auxFunctions import bestHPBO_computation
 from src.config.config import DatasetConfig, StudentConfig, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC
 
 # QKeras model definitions
-from src.topology.student.student_1d import modelKDQP_1D
+from src.topology.student.student_1d import modelStudent_1D
 from src.topology.student.student_2d import modelStudent2D
 from src.topology.student.student_2d_sota import modelStudent2D_SOTA
+from src.topology.student.student_2d_lowrank import modelStudentLowRank2D  # <-- new
 
 from src.student_optimization import studentBO
 
 # Mapping configuration based on D_SIGNAL
 MODEL_MAP = {
-    1: (modelKDQP_1D, (DatasetConfig.SAMPLES,), DatasetConfig.nLabels_1D),
+    1: (modelStudent_1D, (DatasetConfig.SAMPLES,), DatasetConfig.nLabels_1D),
     2: (modelStudent2D, (80, 80, 3), DatasetConfig.nLabels_2D),
-    3: (modelStudent2D_SOTA, (32, 32, 3), DatasetConfig.nLabels_2D)
+    3: (modelStudent2D_SOTA, (32, 32, 3), DatasetConfig.nLabels_2D),
+    4: (modelStudentLowRank2D, (32, 32, 3), DatasetConfig.nLabels_2D)  # <-- new key
 }
 
 
@@ -79,7 +81,35 @@ def train_student(bestHP, teacher_model,
         use_prune=use_prune
     )
 
-    studentModel.save(StudentConfig.MODEL_PATH)
+    # === Determine suffix for strategy ===
+    strategy_suffix = ""
+    if use_kd and use_quant and use_prune:
+        strategy_suffix = "q_kd_prune"
+    elif use_kd and use_quant:
+        strategy_suffix = "q_kd"
+    elif use_kd and use_prune:
+        strategy_suffix = "kd_prune"
+    elif use_quant and use_prune:
+        strategy_suffix = "q_prune"
+    elif use_kd:
+        strategy_suffix = "kd"
+    elif use_quant:
+        strategy_suffix = "quant"
+    elif use_prune:
+        strategy_suffix = "prune"
+    else:
+        strategy_suffix = "baseline"
+
+    # === Build filename ===
+    model_filename = f"../models/student_model_{strategy_suffix}.h5"
+    model_path = os.path.join(StudentConfig.OUTPUT_PATH, model_filename)
+
+    # === Save model ===
+    studentModel.save(model_path)
+    print(f"[INFO] Model saved to: {model_path}")
+
+
+    # studentModel.save(StudentConfig.MODEL_PATH)
     return studentModel, history
 
 
