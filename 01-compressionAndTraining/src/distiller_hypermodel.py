@@ -1,4 +1,4 @@
-# distiller_hypermodel.py
+# src/distiller_hypermodel.py
 
 from keras_tuner import HyperModel
 from src.distillationClassKeras import Distiller
@@ -13,21 +13,22 @@ class DistillerHyperModel(HyperModel):
         self.temperature = temperature
 
     def build(self, hp):
-        # Construir el modelo del estudiante
+        # Construir el modelo del estudiante con los hiperparámetros
         student_model = self.student_builder_fn(hp)
 
-        # Crear el distiller con el modelo del estudiante y el del maestro
+        # Crear el distiller
         distiller = Distiller(student=student_model, teacher=self.teacher_model)
 
-        # Compilar con funciones de pérdida correctamente nombradas
+        # Compilar con pérdidas y optimizador definidos
         distiller.compile(
-            optimizer=student_model.optimizer,
-            metrics=["accuracy"],
-            student_loss_fn=tf.keras.losses.CategoricalCrossentropy(),
+            optimizer=tf.keras.optimizers.Adam(
+                learning_rate=hp.Float("learning_rate", 1e-4, 1e-2, sampling="log")
+            ),
+            metrics=[tf.keras.metrics.CategoricalAccuracy()],
+            student_loss_fn=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
             distillation_loss_fn=tf.keras.losses.KLDivergence(),
             alpha=self.alpha,
             temperature=self.temperature
         )
 
         return distiller
-

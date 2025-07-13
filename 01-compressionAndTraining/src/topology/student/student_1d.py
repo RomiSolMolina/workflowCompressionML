@@ -2,24 +2,22 @@
 
 from tensorflow.keras import Input, regularizers
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Activation
+from tensorflow.keras.layers import Dense, Activation
 from qkeras import QDense, QActivation
 
-def modelKDQP_1D(bestHP, input_shape=(2031,), n_classes=2):
+def modelKDQP_1D(bestHP, input_shape=(2031,), n_classes=2, use_quant=True, use_prune=False):
     """
     Define a 1D student model with quantization support (QKeras).
     """
-    # Quantization formats
+    # Puedes usar los flags en el futuro si quieres condicionar capas
     kernelQ = "quantized_bits(8,1,alpha=1)"
     biasQ = "quantized_bits(8,2,alpha=1)"
     activationQ = "quantized_bits(8)"
 
     model = Sequential(name="student_qkeras_1d")
 
-    # Input
     model.add(Input(shape=input_shape))
 
-    # FC Layer 1
     model.add(QDense(bestHP[0],
                      kernel_quantizer=kernelQ,
                      bias_quantizer=biasQ,
@@ -28,7 +26,6 @@ def modelKDQP_1D(bestHP, input_shape=(2031,), n_classes=2):
                      name="fc1"))
     model.add(QActivation(activationQ, name="relu1"))
 
-    # Optional: Add more layers if bestHP has more
     if len(bestHP) > 1:
         model.add(QDense(bestHP[1],
                          kernel_quantizer=kernelQ,
@@ -47,7 +44,6 @@ def modelKDQP_1D(bestHP, input_shape=(2031,), n_classes=2):
                          name="fc3"))
         model.add(QActivation(activationQ, name="relu3"))
 
-    # Output
     model.add(QDense(n_classes,
                      kernel_quantizer=kernelQ,
                      bias_quantizer=biasQ,

@@ -1,13 +1,16 @@
-# CompressionConfig.py
+# src/config/CompressionConfig.py
 
-class CompressionMode:
-    BASELINE = "baseline"        # No compression
-    QUANTIZATION = "quantization"
-    PRUNING = "pruning"
-    KD = "knowledge_distillation"
-    Q_KD = "quantization_kd"
-    Q_PRUNING = "quantization_pruning"
-    Q_KD_PRUNING = "quantization_kd_pruning"
+from enum import Enum
 
-# Example usage
-SELECTED_COMPRESSION = CompressionMode.Q_KD_PRUNING
+class CompressionMode(Enum):
+    BASELINE = "baseline"
+    QUANTIZATION = "quant"
+    PRUNING = "prune"
+    KD = "kd"
+    Q_KD = "quant+kd"
+    Q_PRUNING = "quant+prune"
+    Q_KD_PRUNING = "quant+kd+prune"
+
+# SELECT THE STRATEGY
+# SELECTED_COMPRESSION = CompressionMode.Q_KD_PRUNING
+SELECTED_COMPRESSION = CompressionMode.PRUNING

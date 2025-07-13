@@ -8,7 +8,7 @@ from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
 from skimage.transform import resize
-from src.config import DatasetConfig
+from src.config.config import DatasetConfig
 
 
 def load_images_from_directory(data_dir, target_size=(80, 80)):

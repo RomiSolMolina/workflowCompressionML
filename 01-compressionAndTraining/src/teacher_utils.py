@@ -1,6 +1,6 @@
 from src.teacher_hpo_utils import run_teacher_hpo
 from src.auxFunctions import bestHPBO_computation
-from src.config import DatasetConfig, TeacherConfig, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC
+from src.config.config import DatasetConfig, TeacherConfig, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC
 from tensorflow.keras.models import load_model
 from src.teacher_training_utils import train_teacher_model
 
