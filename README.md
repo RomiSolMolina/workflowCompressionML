@@ -18,32 +18,67 @@ The proposed workflow is based on three stages: DNN training and compression, in
 ## Required libraries and tools
 
 #### Libraries
-- Python 3.9.13
-- Tensorflow 2.4.1
-- Qkeras 0.9.0
-- hls4ml 0.6.0
-- Pandas 1.5.2
-- Seaborn 0.11.2
-- Keras-Tuner 1.1.2
-- Scikit-learn 1.1.1
+Check the file `requirements.txt` inside the environment folder.
 
 #### SoC/FPGA tools
-- Vivado Design Suite - HLx Editions 2019.1 or 2019.2
+- Vivado Design Suite - HLx Editions 2019.1, 2019.2, 2022.2
 
 ## What's in this repository?
 
 Repository tree:
 
-- The workflow comprises these main folders:
-    - compressionAndTraining,
-    - assessmentFramework, 
-    - hls4mlIntegration.
-      
-- The folder integrationPYNQ is for those willing to integrate the ML IP core into the PYNQ framework.
+- The workflow comprises the following folders:
+    - compressionAndTraining
+    - assessmentFramework
+    - hls4mlIntegration
+    - integrationPYNQ*
+    - environment
+       
+* *The folder integrationPYNQ is for those willing to integrate the ML IP core into the PYNQ framework.
 
 ## Custom datasets
 
 - Available under reasonable request.
+
+## Current Branches
+
+| Branch | Purpose |
+|--------|---------|
+| `main` | Clean refactor of original code |
+| `backup_original` | Legacy structure linked to initial publication |
+| `full_compression` | Combined pipeline for QAT + KD + pruning in a single loop |
+| _coming soon..._ | Separate branches for isolated quantization, pruning, and KD |
+
+---
+
+## Citation
+
+If this codebase is linked to a publication, cite it as:
+
+```
+@ARTICLE{10360204,
+  author={Molina, Romina Soledad and Morales, Iván René and Crespo, Maria Liz and Costa, Veronica Gil and Carrato, Sergio and Ramponi, Giovanni},
+  journal={IEEE Embedded Systems Letters}, 
+  title={An End-to-End Workflow to Efficiently Compress and Deploy DNN Classifiers on SoC/FPGA}, 
+  year={2024},
+  volume={16},
+  number={3},
+  pages={255-258},
+  doi={10.1109/LES.2023.3343030}}
+
+```
+
+---
+
+## Acknowledgements
+
+Built on top of:
+
+- [TensorFlow Model Optimization Toolkit](https://www.tensorflow.org/model_optimization)
+- [QKeras](https://github.com/google/qkeras)
+- [Keras Tuner](https://keras.io/keras_tuner/)
+
+---
 
 ## Final remarks
 
