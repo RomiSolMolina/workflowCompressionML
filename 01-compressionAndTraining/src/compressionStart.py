@@ -2,12 +2,13 @@ from tensorflow.keras.datasets import cifar10
 from tensorflow.keras.utils import to_categorical
 from src.utils import normalizationPix, confusionMatrixPlot
 from src.dataset_loader import loadDataset_1D, loadDataset_2D
-from src.config import DatasetConfig, TeacherConfig, dataset_config
+from src.config.config import DatasetConfig, TeacherConfig, dataset_config
 from src.teacher_utils import optimize_teacher, train_teacher, load_teacher_model
 from src.student_utils import optimize_student, train_student
 from src.evaluation import plot_training_curves, plot_confusion_matrix
 
 from src.student_utils import optimize_student, train_student
+from src.config.CompressionConfig import SELECTED_COMPRESSION, CompressionMode
 
 
 def startDNNTrainingAndCompression():

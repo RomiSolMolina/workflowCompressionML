@@ -4,7 +4,7 @@ import os
 from tensorflow.keras.models import load_model
 from src.student_training_utils import train_student_model
 from src.auxFunctions import bestHPBO_computation
-from src.config import DatasetConfig, StudentConfig, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC
+from src.config.config import DatasetConfig, StudentConfig, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC
 
 # QKeras model definitions
 from src.topology.student.student_1d import modelKDQP_1D

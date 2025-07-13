@@ -6,7 +6,7 @@ import keras_tuner as kt
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow_model_optimization.sparsity.keras import UpdatePruningStep
 
-from src.config import DatasetConfig, StudentConfig
+from src.config.config import DatasetConfig, StudentConfig
 from src.topology.student_hpo.student_hpo_1d import modelStudent1D
 from src.topology.student_hpo.student_hpo_2d import build_model_hpo_student_2d
 from src.topology.student_hpo.student_hpo_2d_sota import build_model_student_hpo_2D_sota

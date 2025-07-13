@@ -3,7 +3,7 @@ import shutil
 import tensorflow as tf
 import keras_tuner as kt
 
-from src.config import TeacherConfig, DatasetConfig
+from src.config.config import TeacherConfig, DatasetConfig
 from src.topology.teacher_hpo.teacher_hpo_1d import topologyTeacher_HPO_1D
 from src.topology.teacher_hpo.teacher_hpo_2d import topologyTeacher_HPO_2D
 from src.topology.teacher_hpo.teacher_hpo_2d_sota import topology_teacher_hpo_2D_SOTA
