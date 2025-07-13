@@ -43,10 +43,7 @@ def startDNNTrainingAndCompression(
             CompressionMode.Q_KD,
             CompressionMode.Q_KD_PRUNING
         ]
-        use_lowrank = SELECTED_COMPRESSION in [
-            CompressionMode.Q_LOW_RANK,
-        ]
-
+        # use_lowrank = SELECTED_COMPRESSION == CompressionMode.LOWRANK  # TODO: implement
 
     print(f"\n[INFO] Selected Compression Strategy: {selected_compression}")
     print(f"[INFO] use_kd={use_kd}, use_quant={use_quant}, use_prune={use_prune}")
@@ -84,6 +81,7 @@ def startDNNTrainingAndCompression(
         }
 
     elif dataset_type == 3:
+
         (images_train, y_train), (images_test, y_test) = cifar10.load_data()
         images_train, images_test = normalizationPix(images_train, images_test)
         y_train = to_categorical(y_train)

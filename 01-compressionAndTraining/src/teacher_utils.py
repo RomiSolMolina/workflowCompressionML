@@ -70,8 +70,8 @@ def train_teacher(bestHP, xTrain=None, xTest=None, yTrain=None, yTest=None,
             x_val=images_test,
             y_val=y_test,
             lr=lr,
-            input_shape=(32, 32, 3),
-            n_classes=10
+            input_shape=(DatasetConfig.COLS, DatasetConfig.ROWS, 3),
+            n_classes=DatasetConfig.nLabels_2D
         )
 
     teacherModel.save(TeacherConfig.MODEL_PATH)

@@ -4,14 +4,14 @@ from dataclasses import dataclass
 
 @dataclass
 class DatasetConfig:
-    D_SIGNAL: int = 1   #1: 1D, 2: 2D, 3: Sota dataset
+    D_SIGNAL: int = 3   #1: 1D, 2: 2D, 3: Sota dataset
     ROOT_PATH_1D: Path = Path("/media/ro/Data/datasets/gammaNeutron_diamondDetector/fft/")
     ROOT_PATH_2D: Path = Path("/home/ro/kaleido/datasets/unpolished")
     nLabels_1D: int = 2
-    nLabels_2D: int = 2
+    nLabels_2D: int = 10
     SAMPLES: int = 2031    # INPUT SIZE
-    ROWS: int = 80
-    COLS: int = 80
+    ROWS: int = 32
+    COLS: int = 32
     DEPTH: int = 3
 
 
@@ -42,14 +42,14 @@ class StudentConfig:
 class HyperParamConfig:
     CONV_VAR: str = "conv_"
     FC_VAR: str = "fc"
-    UPPER_CONV: int = 4
+    UPPER_CONV: int = 8
     UPPER_FC: int = 3
 
 ## Hyperparameters 
 CONV_VAR = "conv_"
 FC_VAR = "fc"
-UPPER_CONV = 3
-UPPER_FC = 4
+UPPER_CONV = 8
+UPPER_FC = 3
 
 # === Instancias de configuración global === #
 dataset_config = DatasetConfig()

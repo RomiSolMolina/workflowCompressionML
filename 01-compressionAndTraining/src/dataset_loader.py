@@ -1,3 +1,4 @@
+# src/dataset_loader.py
 
 import os
 import glob
@@ -8,6 +9,8 @@ from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
 from skimage.transform import resize
+from tensorflow.keras.datasets import cifar10
+
 from src.config.config import DatasetConfig
 
 
@@ -45,6 +48,31 @@ def loadDataset_2D(root_path, classLabels, rows, cols):
     return images_train, images_val, images_test, y_train, y_test
 
 
+def loadDataset_CIFAR10():
+    """
+    Loads CIFAR-10 dataset and prepares it for training.
+    Returns:
+        x_train, x_val, x_test, y_train, y_val, y_test
+    """
+    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+    # Normalize
+    x_train = x_train.astype("float32") / 255.0
+    x_test = x_test.astype("float32") / 255.0
+
+    # One-hot encode labels
+    y_train = to_categorical(y_train, DatasetConfig.nLabels_2D)
+    y_test = to_categorical(y_test, DatasetConfig.nLabels_2D)
+
+    # Split training into train/val
+    x_train, x_val, y_train, y_val = train_test_split(
+        x_train, y_train, test_size=0.1, random_state=42
+    )
+
+    print(f"CIFAR-10 loaded: train={len(x_train)}, val={len(x_val)}, test={len(x_test)}")
+    return x_train, x_val, x_test, y_train, y_val, y_test
+
+
 def preproc_dataset_1D(df, label_column='cluster', train_size=1500, test_size=50):
     df_train, df_test = pd.DataFrame(), pd.DataFrame()
     for k in range(DatasetConfig.nLabels_1D):
@@ -54,24 +82,11 @@ def preproc_dataset_1D(df, label_column='cluster', train_size=1500, test_size=50
     return shuffle(df_train), shuffle(df_test)
 
 
-import os
-import glob
-import pandas as pd
-import numpy as np
-
-from sklearn.model_selection import train_test_split
-from tensorflow.keras.utils import to_categorical
-
-from src.dataset_loader import preproc_dataset_1D  # Ensure this exists
-
 def loadDataset_1D(root_path, nLabels, samples):
     """
-    Loads a 1D dataset from a root directory containing subfolders for each class.
-    Each subfolder should contain CSV files with a 'cluster' column or feature data.
+    Loads a 1D dataset from subfolders with CSV files for each class.
     """
-
     all_data = []
-
     subdirs = sorted([d for d in os.listdir(root_path) if os.path.isdir(os.path.join(root_path, d))])
 
     for label_idx, subdir in enumerate(subdirs):
@@ -83,13 +98,9 @@ def loadDataset_1D(root_path, nLabels, samples):
             df["cluster"] = label_idx
             all_data.append(df)
 
-    # Concatenate all dataframes
     df_combined = pd.concat(all_data, ignore_index=True)
-
-    # Optional: shuffle
     df_combined = df_combined.sample(frac=1, random_state=42).reset_index(drop=True)
 
-    # Preprocess
     df_train, df_test = preproc_dataset_1D(df_combined)
 
     x_train = df_train.drop('cluster', axis=1)
@@ -98,7 +109,6 @@ def loadDataset_1D(root_path, nLabels, samples):
     x_test = df_test.drop('cluster', axis=1)
     y_test = to_categorical(df_test['cluster'], nLabels)
 
-    # Split train into train/val
     x_train, x_val, y_train, y_val = train_test_split(
         x_train, y_train, test_size=0.1, random_state=0
     )

@@ -1,4 +1,3 @@
-
 # src/student_training.py
 
 import tensorflow as tf
@@ -13,20 +12,22 @@ from qkeras.utils import _add_supported_quantized_objects
 
 from src.distillationClassKeras import Distiller
 
+
 def train_student_model(model_fn, bestHP, teacher_model,
                         x_train, y_train, x_val, y_val,
                         lr, input_shape, n_classes,
                         batch_size=128, epochs=64,
-                        use_kd=True, use_quant=True, use_prune=True):
+                        use_kd=True, use_quant=True, use_prune=True, use_lowrank=False):
     """
-    Train student with optional quantization, pruning, and knowledge distillation.
+    Train student with optional quantization, pruning, knowledge distillation, and low-rank compression.
     """
 
     # === Build model === #
-    student_model = model_fn(bestHP, use_quant=use_quant, use_prune=False)
+    student_model = model_fn(bestHP, use_quant=use_quant, use_prune=False, use_lowrank=use_lowrank)
 
     # === Apply pruning if selected === #
     if use_prune:
+        print("Pruning compression is enabled")
         NSTEPS = len(x_train) // batch_size
         pruning_params = {
             "pruning_schedule": ConstantSparsity(
@@ -38,8 +39,15 @@ def train_student_model(model_fn, bestHP, teacher_model,
         }
         student_model = prune_low_magnitude(student_model, **pruning_params)
 
+    # === Apply low-rank compression if selected === #
+    if use_lowrank:
+        print("Low-rank compression is enabled (apply custom decomposition if defined)")
+        
+        # student_model = apply_low_rank_approx(student_model)
+
     # === Compile === #
     if use_kd:
+        print("KD compression is enabled")
         distiller = Distiller(student=student_model, teacher=teacher_model)
         distiller.compile(
             optimizer=Adam(learning_rate=lr),
@@ -86,4 +94,3 @@ def train_student_model(model_fn, bestHP, teacher_model,
     final_model.summary()
 
     return final_model, history
-

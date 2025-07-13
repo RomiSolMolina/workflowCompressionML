@@ -13,5 +13,5 @@ class CompressionMode(Enum):
     Q_KD_PRUNING = "quant+kd+prune"
 
 # SELECT THE STRATEGY
-SELECTED_COMPRESSION = CompressionMode.Q_KD_PRUNING
-# SELECTED_COMPRESSION = CompressionMode.BASELINE
+# SELECTED_COMPRESSION = CompressionMode.Q_KD_PRUNING
+SELECTED_COMPRESSION = CompressionMode.QUANTIZATION
