@@ -5,7 +5,10 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation
 from qkeras import QDense, QActivation
 
-def modelStudent_1D(bestHP, input_shape=(2031,), n_classes=2, use_quant=True, use_prune=False):
+from src.config.config import DatasetConfig, TeacherConfig, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC
+
+
+def modelStudent_1D(bestHP, input_shape=(DatasetConfig.SAMPLES,), n_classes=DatasetConfig.nLabels_1D, use_quant=True, use_prune=False, use_lowrank=False):
     """
     Define a 1D student model with quantization support (QKeras).
     """

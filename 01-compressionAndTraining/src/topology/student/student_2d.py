@@ -5,7 +5,7 @@ from tensorflow.keras.layers import Conv2D, Dense, MaxPooling2D, Flatten, Activa
 from tensorflow.keras.layers import BatchNormalization
 from qkeras import QConv2DBatchnorm, QDense, QActivation
 
-def modelStudent2D(bestHP, input_shape=(80, 80, 3), n_classes=2, use_quant=True):
+def modelStudent2D(bestHP, input_shape=(80, 80, 3), n_classes=2, use_quant=True, use_lowrank=False):
     """
     Define a 2D student model with optional quantization using QKeras.
     Parameters:
@@ -77,4 +77,5 @@ def modelStudent2D(bestHP, input_shape=(80, 80, 3), n_classes=2, use_quant=True)
 
     model = Model(inputs=x_in, outputs=x_out, name="student_qkeras_2d" if use_quant else "student_fp_2d")
     model.summary()
+    
     return model

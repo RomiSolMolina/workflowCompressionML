@@ -55,8 +55,10 @@ def train_student(bestHP, teacher_model,
     """
     Trains the student model using compression flags: quantization, pruning, KD.
     """
-    lr = bestHP.get("learning_rate")
+    
+
     bestHP_student = bestHPBO_computation(bestHP, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC)
+    lr = bestHP.get("learning_rate")
 
     model_fn, input_shape, n_classes = MODEL_MAP[DatasetConfig.D_SIGNAL]
 

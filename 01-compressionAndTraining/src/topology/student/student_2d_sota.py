@@ -5,7 +5,7 @@ from tensorflow.keras.layers import Conv2D, Dense, MaxPooling2D, Flatten, Activa
 from qkeras import QConv2DBatchnorm, QDense, QActivation
 
 
-def modelStudent2D_SOTA(bestHP, input_shape=(32, 32, 3), n_classes=10, use_quant=True):
+def modelStudent2D_SOTA(bestHP, input_shape=(32, 32, 3), n_classes=10, use_quant=True, use_lowrank=False):
     """
     2D Student model (SOTA version) with optional QKeras quantization.
     """

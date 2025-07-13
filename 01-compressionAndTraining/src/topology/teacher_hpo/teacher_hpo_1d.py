@@ -3,6 +3,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.optimizers import Adam
+from src.config.config import DatasetConfig, TeacherConfig, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC
 
 
 def topologyTeacher_HPO_1D(hp):
@@ -10,7 +11,7 @@ def topologyTeacher_HPO_1D(hp):
     HPO search space definition for 1D teacher model.
     """
     model = Sequential()
-    input_shape = (2031, )
+    input_shape = (DatasetConfig.SAMPLES, )
 
     # Hidden layers
     model.add(Dense(hp.Int("fc1", min_value=32, max_value=100, step=10),
@@ -30,7 +31,7 @@ def topologyTeacher_HPO_1D(hp):
     model.add(Activation("relu"))
 
     # Output
-    model.add(Dense(2, name="output"))
+    model.add(Dense(DatasetConfig.nLabels_1D, name="output"))
     model.add(Activation("softmax"))
 
     # Optimizer
