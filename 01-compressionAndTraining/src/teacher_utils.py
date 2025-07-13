@@ -29,9 +29,10 @@ def train_teacher(bestHP, xTrain=None, xTest=None, yTrain=None, yTest=None,
     """
     Train the teacher model using the unified training function.
     """
-    lr = bestHP.get("learning_rate")
+    
     bestHP = bestHPBO_computation(bestHP, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC)
-
+    lr = bestHP.get("learning_rate")
+    
     if DatasetConfig.D_SIGNAL == 1:
         model_fn = modelTeacherTopology_1D
         teacherModel, history  = train_teacher_model(
