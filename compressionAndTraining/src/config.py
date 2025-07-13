@@ -1,76 +1,58 @@
-## --------------------- DEFINITIONS AND PARAMETERS ----------------
-
-## TEACHER OPTIMIZATION
-## Define if the teacher will be trained from scratch or a pre-trained model will be used
-# 0: train teacher from scratch, 1: pre-trained model
-TEACHER_OP = 1
-
-## TYPE OF INPUT
-## Define if the input will be 1D or 2D signal for custon datasets. The value 3 is reserved for SOTA datasets.
-# Type of input -->  1: 1D signal, 2: 2D signal, 3: state-of-the art dataset
-D_SIGNAL = 2
+from pathlib import Path
+from dataclasses import dataclass
 
 
-## CUSTOM DATASET PATHS
-ROOT_PATH_2D = "/home/ro/kaleido/datasets/unpolished"
-nLabels_2D = 2
-SAMPLES = 30
-
-ROOT_PATH_1D = r'dataset/psd/csv'
-nLabels_1D = 4
-ROWS = 80
-COLS = 80
-DEPTH = 3
-
-# Teacher optimization and training
-# -----------------------------------------------------------------
-
-# define the path to the output directory (the algorithm will save intermediate results)
-OUTPUT_PATH_TEACHER = "tunerTeacher"
-# initialize the input shape and number of classes
-# INPUT_SHAPE = (30,)
-# NUM_CLASSES = 4
-
-# Number of iterations for BO
-N_ITERATIONS_TEACHER = 200
-
-# define the total number of epochs to train, batch size, and the
-# early stopping patience
-EPOCHS_TEACHER = 16
-BATCH_TEACHER = 32
-EARLY_STOPPING_PATIENCE_TEACHER = 5
-
-N_ITERATIONS_TEACHER = 2
-
-PATH_MODEL_TEACHER = "models/teacherModel.h5"
-
-# Student optimization and training
-# -----------------------------------------------------------------
-# define the path to the output directory (the algorithm will save intermediate results)
-OUTPUT_PATH_STUDENT = "tunerStudent"
-
-# Number of iterations for BO
-N_ITERATIONS_STUDENT = 2
-
-EPOCHS_STUDENT = 32
-BATCH_STUDENT = 32
-EARLY_STOPPING_PATIENCE_STUDENT = 5
-
-# Pruning
-CONSTANT_SPARSITY = 0.5
+@dataclass
+class DatasetConfig:
+    D_SIGNAL: int = 1
+    ROOT_PATH_1D: Path = Path("/media/ro/Data/datasets/gammaNeutron_diamondDetector/fft/")
+    ROOT_PATH_2D: Path = Path("/home/ro/kaleido/datasets/unpolished")
+    nLabels_1D: int = 2
+    nLabels_2D: int = 2
+    SAMPLES: int = 2031    # INPUT SIZE
+    ROWS: int = 80
+    COLS: int = 80
+    DEPTH: int = 3
 
 
-PATH_MODEL_STUDENT = "models/compressedModel.h5"
+
+@dataclass
+class TeacherConfig:
+    TEACHER_OP: int = 0  # 0: train from scratch, 1: pre-trained
+    OUTPUT_PATH: Path = Path("tunerTeacher")
+    N_ITERATIONS: int = 2
+    EPOCHS: int = 16
+    BATCH_SIZE: int = 32
+    EARLY_STOPPING_PATIENCE: int = 5
+    MODEL_PATH: Path = Path("models/teacherModel.h5")
 
 
+@dataclass
+class StudentConfig:
+    OUTPUT_PATH: Path = Path("tunerStudent")
+    N_ITERATIONS: int = 2
+    EPOCHS: int = 32
+    BATCH_SIZE: int = 32
+    EARLY_STOPPING_PATIENCE: int = 5
+    CONSTANT_SPARSITY: float = 0.5
+    MODEL_PATH: Path = Path("models/compressedModel.h5")
+
+
+@dataclass
+class HyperParamConfig:
+    CONV_VAR: str = "conv_"
+    FC_VAR: str = "fc"
+    UPPER_CONV: int = 4
+    UPPER_FC: int = 3
 
 ## Hyperparameters 
+CONV_VAR = "conv_"
+FC_VAR = "fc"
+UPPER_CONV = 3
+UPPER_FC = 4
 
-CONV_VAR = 'conv_'
-FC_VAR = 'fc'
-
-## 
-# Quantity of layers based on the topology defined by the user
-UPPER_CONV = 4
-UPPER_FC = 3    
-
+# === Instancias de configuración global === #
+dataset_config = DatasetConfig()
+teacher_config = TeacherConfig()
+student_config = StudentConfig()
+hp_config = HyperParamConfig()

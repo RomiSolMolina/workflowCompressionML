@@ -40,20 +40,31 @@ def normalizationPix(train, test):
     return train_, test_
 
 
-def bestHPBO_computation(bestHP_BO, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC):
+import re
+
+def bestHPBO_computation(bestHP_BO, CONV_VAR, FC_VAR, UPPER_CONV=10, UPPER_FC=10):
     """
-    Grab the best hyperparameters after the optimization process
-    
+    Extract best hyperparameters dynamically from the tuning result,
+    checking which keys actually exist.
     """
     bestHP = []
-    # Grab hyper-params
-    for i in range (1,UPPER_CONV+1):
-        bestHP.append(bestHP_BO.get(CONV_VAR + str(i)))
-    for j in range (1, UPPER_FC+1):
-        bestHP.append(bestHP_BO.get(FC_VAR + str(j)))
-   
-    print("Best hyper-parameter configuration: ", bestHP)
 
+    # Try conv layers
+    for i in range(1, UPPER_CONV + 1):
+        key = f"{CONV_VAR}{i}"
+        if key in bestHP_BO:
+            bestHP.append(bestHP_BO[key])
+        else:
+            break  # No more conv layers
+
+    # Try fc layers
+    for j in range(1, UPPER_FC + 1):
+        key = f"{FC_VAR}{j}"
+        if key in bestHP_BO:
+            bestHP.append(bestHP_BO[key])
+        else:
+            break  # No more fc layers
+
+    print("[INFO] Best hyper-parameter configuration: ", bestHP)
     return bestHP
-
 
