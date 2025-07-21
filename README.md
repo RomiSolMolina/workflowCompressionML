@@ -28,11 +28,12 @@ Check the file `requirements.txt` inside the environment folder.
 Repository tree:
 
 - The workflow comprises the following folders:
-    - compressionAndTraining
-    - assessmentFramework
-    - hls4mlIntegration
-    - integrationPYNQ*
-    - environment
+    - 00-environment
+    - 01-compressionAndTraining
+    - 02-hls4mlIntegration
+    - 03-assessmentFramework
+    - 04-integrationPYNQ*
+    
        
 * *The folder integrationPYNQ is for those willing to integrate the ML IP core into the PYNQ framework.
 
