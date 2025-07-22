@@ -94,14 +94,19 @@ def startDNNTrainingAndCompression(
         }
 
     # === Teacher Training === #
+    # if TeacherConfig.TEACHER_OP == 0:
+    #     bestHP_teacher = optimize_teacher(
+    #         xTrain=dataset_info.get("xTrain"),
+    #         xTest=dataset_info.get("xTest"),
+    #         yTrain=dataset_info.get("yTrain"),
+    #         yTest=dataset_info.get("yTest")
+    #     )
+    #     teacherModel, history = train_teacher(bestHP_teacher, **dataset_info)
+        
     if TeacherConfig.TEACHER_OP == 0:
-        bestHP_teacher = optimize_teacher(
-            xTrain=dataset_info.get("xTrain"),
-            xTest=dataset_info.get("xTest"),
-            yTrain=dataset_info.get("yTrain"),
-            yTest=dataset_info.get("yTest")
-        )
-        teacherModel, history = train_teacher(bestHP_teacher, **dataset_info)
+            bestHP_teacher = optimize_teacher(**dataset_info)
+            teacherModel, history = train_teacher(bestHP_teacher, **dataset_info)       
+
     else:
         teacherModel = load_teacher_model()
         history = None
