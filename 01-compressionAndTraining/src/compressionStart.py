@@ -45,8 +45,8 @@ def startDNNTrainingAndCompression(
         ]
         # use_lowrank = SELECTED_COMPRESSION == CompressionMode.LOWRANK  # TODO: implement
 
-    print(f"\n[INFO] Selected Compression Strategy: {selected_compression}")
-    print(f"[INFO] use_kd={use_kd}, use_quant={use_quant}, use_prune={use_prune}")
+    print(f"\nSelected Compression Strategy: {selected_compression}")
+    print(f"use_kd={use_kd}, use_quant={use_quant}, use_prune={use_prune}")
 
     # === Dataset Loading === #
     dataset_type = DatasetConfig.D_SIGNAL

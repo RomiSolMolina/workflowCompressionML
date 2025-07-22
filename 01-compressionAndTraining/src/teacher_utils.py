@@ -17,10 +17,13 @@ def optimize_teacher(xTrain=None, xTest=None, yTrain=None, yTest=None,
     Perform Bayesian optimization on teacher model depending on dataset type.
     """
     if DatasetConfig.D_SIGNAL == 1:
+        print(f"\n1D signal - MLP model - Optimization")
         return run_teacher_hpo(xTrain, yTrain, xTest, yTest)
     elif DatasetConfig.D_SIGNAL == 2:
+        print(f"\n2D signal - CNN model - Optimization")
         return run_teacher_hpo(images_train, y_train, images_test, y_test)
     else:
+        print(f"\n2D signal - CNN model (SOTA-style) - Optimization")
         return run_teacher_hpo(images_train, y_train, images_test, y_test)
 
 
@@ -37,6 +40,7 @@ def train_teacher(bestHP, xTrain=None, xTest=None, yTrain=None, yTest=None,
     bestHP = bestHPBO_computation(bestHP, CONV_VAR, FC_VAR, UPPER_CONV, UPPER_FC)
 
     if DatasetConfig.D_SIGNAL == 1:
+        print(f"\n1D signal - MLP model - Train teacher")
         model_fn = modelTeacherTopology_1D
         teacherModel, history  = train_teacher_model(
             model_fn=model_fn,
@@ -51,6 +55,7 @@ def train_teacher(bestHP, xTrain=None, xTest=None, yTrain=None, yTest=None,
         )
 
     elif DatasetConfig.D_SIGNAL == 2:
+        print(f"\n2D signal - CNN model - Train teacher")
         model_fn = topologyTeacher_2D
         teacherModel, history  = train_teacher_model(
             model_fn=model_fn,
@@ -65,6 +70,7 @@ def train_teacher(bestHP, xTrain=None, xTest=None, yTrain=None, yTest=None,
         )
 
     else:
+        print(f"\n2D signal - CNN model (SOTA-style) - Train teacher")
         model_fn = topologyTeacher_2D_SOTA
         teacherModel, history  = train_teacher_model(
             model_fn=model_fn,
@@ -77,7 +83,7 @@ def train_teacher(bestHP, xTrain=None, xTest=None, yTrain=None, yTest=None,
             input_shape=(DatasetConfig.COLS, DatasetConfig.ROWS, 3),
             n_classes=DatasetConfig.nLabels_2D
         )
-
+    
     teacherModel.save(TeacherConfig.MODEL_PATH)
     return teacherModel, history
 

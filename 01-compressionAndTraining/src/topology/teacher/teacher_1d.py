@@ -11,6 +11,7 @@ def modelTeacherTopology_1D(bestHP, input_shape=(2031,), n_classes=2):
     Returns:
         keras.Model: Compiled Keras model.
     """
+    print(f"\n1D signal - MLP model")
 
     inputs = layers.Input(shape=input_shape, name="input")
 

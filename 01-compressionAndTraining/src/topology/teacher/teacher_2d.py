@@ -13,6 +13,8 @@ def topologyTeacher_2D(bestHP, input_shape=(80, 80, 3), n_classes=10):
         keras.Model: Compiled Keras model.
     """
 
+    print(f"\n2D signal - CNN model")
+
     inputs = layers.Input(shape=input_shape, name="input")
 
     x = layers.Conv2D(bestHP[0], (3, 3), padding="same", kernel_regularizer=regularizers.l2(1e-4), name='conv1')(inputs)

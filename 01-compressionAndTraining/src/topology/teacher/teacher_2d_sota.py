@@ -8,6 +8,8 @@ def topologyTeacher_2D_SOTA(bestHP, input_shape=(32, 32, 3), n_classes=10):
     Functional API definition of a 2D teacher CNN model (SOTA-style) using best hyperparameters.
     """
 
+    print(f"\n2D signal - CNN model (SOTA-style)")
+
     x = x_in = Input(shape=input_shape)
 
     # --- Conv Block 1 ---

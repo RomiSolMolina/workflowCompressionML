@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 @dataclass
 class DatasetConfig:
-    D_SIGNAL: int = 3   #1: 1D, 2: 2D, 3: Sota dataset
+    D_SIGNAL: int = 1   #1: 1D, 2: 2D, 3: Sota dataset
     ROOT_PATH_1D: Path = Path("/media/ro/Data/datasets/gammaNeutron_diamondDetector/fft/")
     ROOT_PATH_2D: Path = Path("/home/ro/kaleido/datasets/unpolished")
     nLabels_1D: int = 2
@@ -20,7 +20,7 @@ class DatasetConfig:
 class TeacherConfig:
     TEACHER_OP: int = 0  # 0: train from scratch, 1: pre-trained
     OUTPUT_PATH: Path = Path("tunerTeacher")
-    N_ITERATIONS: int = 1
+    N_ITERATIONS: int = 10
     EPOCHS: int = 8
     BATCH_SIZE: int = 32
     EARLY_STOPPING_PATIENCE: int = 5
