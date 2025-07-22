@@ -55,14 +55,12 @@ def startDNNTrainingAndCompression():
         }
 
     # === Teacher Training === #
+    
     if TeacherConfig.TEACHER_OP == 0:
-        bestHP_teacher = optimize_teacher(
-            xTrain=xTrain, xTest=xTest, yTrain=yTrain, yTest=yTest
-        )
-        teacherModel, history = train_teacher(bestHP_teacher, **dataset_info)
+            bestHP_teacher = optimize_teacher(**dataset_info)
+            teacherModel, history = train_teacher(bestHP_teacher, **dataset_info)
     else:
         teacherModel = load_teacher_model()
-
 
     # === Teacher Evaluation === #
     if DatasetConfig.D_SIGNAL == 1:
@@ -73,7 +71,6 @@ def startDNNTrainingAndCompression():
     plot_training_curves(history)
 
   
-
     # === Student Optimization & Training === #
     bestHP_student = optimize_student(**dataset_info, teacher_model=teacherModel)
     studentModel, history = train_student(bestHP_student, teacherModel, **dataset_info)

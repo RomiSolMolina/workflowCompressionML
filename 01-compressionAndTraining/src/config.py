@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 @dataclass
 class DatasetConfig:
-    D_SIGNAL: int = 1
+    D_SIGNAL: int = 3
     ROOT_PATH_1D: Path = Path("/media/ro/Data/datasets/gammaNeutron_diamondDetector/fft/")
     ROOT_PATH_2D: Path = Path("/home/ro/kaleido/datasets/unpolished")
     nLabels_1D: int = 2
@@ -20,8 +20,8 @@ class DatasetConfig:
 class TeacherConfig:
     TEACHER_OP: int = 0  # 0: train from scratch, 1: pre-trained
     OUTPUT_PATH: Path = Path("tunerTeacher")
-    N_ITERATIONS: int = 2
-    EPOCHS: int = 16
+    N_ITERATIONS: int = 1
+    EPOCHS: int = 1
     BATCH_SIZE: int = 32
     EARLY_STOPPING_PATIENCE: int = 5
     MODEL_PATH: Path = Path("models/teacherModel.h5")
@@ -30,8 +30,8 @@ class TeacherConfig:
 @dataclass
 class StudentConfig:
     OUTPUT_PATH: Path = Path("tunerStudent")
-    N_ITERATIONS: int = 2
-    EPOCHS: int = 32
+    N_ITERATIONS: int = 1
+    EPOCHS: int = 1
     BATCH_SIZE: int = 32
     EARLY_STOPPING_PATIENCE: int = 5
     CONSTANT_SPARSITY: float = 0.5
@@ -48,8 +48,8 @@ class HyperParamConfig:
 ## Hyperparameters 
 CONV_VAR = "conv_"
 FC_VAR = "fc"
-UPPER_CONV = 3
-UPPER_FC = 4
+UPPER_CONV = 7
+UPPER_FC = 3
 
 # === Instancias de configuración global === #
 dataset_config = DatasetConfig()
