@@ -61,6 +61,7 @@ def startDNNTrainingAndCompression():
             teacherModel, history = train_teacher(bestHP_teacher, **dataset_info)
     else:
         teacherModel = load_teacher_model()
+        history = None
 
     # === Teacher Evaluation === #
     if DatasetConfig.D_SIGNAL == 1:
@@ -68,7 +69,8 @@ def startDNNTrainingAndCompression():
     else:
         plot_confusion_matrix(teacherModel, images_test, y_test)
 
-    plot_training_curves(history)
+    if history:
+        plot_training_curves(history)
 
   
     # === Student Optimization & Training === #
